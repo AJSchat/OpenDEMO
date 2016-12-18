@@ -1,0 +1,23 @@
+{
+"basepath" "..\base"
+"rshcmd" ""
+"remotebasepath" "..\base"
+"entitypath" "__QERPATH*.def"
+"texturepath" "..\base\textures"
+"autosave" "..\base\maps\autosave.map"
+
+"bsp FullVis (1/2 LMs)" 	"__QERPATHsof2map -bsp -rename -samplesize 32 $ -class 4 && __QERPATHsof2map -vis $ -class 2 && __QERPATHsof2map -light -extra -samplesize 32 $"
+"bsp FullVis" 			"__QERPATHsof2map -bsp -rename $ && __QERPATHsof2map -vis $ && __QERPATHsof2map -light $"
+"bsp FullVis (extra)" 	"__QERPATHsof2map -bsp -rename $ && __QERPATHsof2map -vis $ && __QERPATHsof2map -light -extra $"
+"bsp FullVis (nolight)" "__QERPATHsof2map -bsp -rename $ && __QERPATHsof2map -vis $"
+"bsp FastVis (nolight)" "__QERPATHsof2map -bsp -rename $ && __QERPATHsof2map -vis -fast $"
+"bsp FastVis" 			"__QERPATHsof2map -bsp -rename $ && __QERPATHsof2map -vis -fast $ && __QERPATHsof2map -light $"
+"bsp NoVis" 			"__QERPATHlocalbatch\novis.bat $"
+"bsp OnlyEnts" 			"__QERPATHsof2map -bsp -rename -onlyents $"
+"bsp Info"				"__QERPATHsof2map -info $"
+"bsp Relight (extra)" 	"__QERPATHsof2map -bsp -rename -onlyents $ && __QERPATHsof2map -light -extra $"
+"bsp Relight (1/2 LM)" 	"__QERPATHsof2map -bsp -rename -onlyents $ && __QERPATHsof2map -light -extra -samplesize 32 $"
+"brush_primit" "0"
+
+}
+
