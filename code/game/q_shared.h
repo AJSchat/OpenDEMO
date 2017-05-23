@@ -688,7 +688,9 @@ float Q_rsqrt( float f );		// reciprocal square root
 signed char ClampChar( int i );
 signed short ClampShort( int i );
 
+#if 0
 float powf ( float x, int y );
+#endif
 
 // this isn't a real cheap function to call!
 int DirToByte( vec3_t dir );
@@ -998,7 +1000,11 @@ typedef enum {
 	FS_WRITE,
 	FS_APPEND,
 	FS_APPEND_SYNC,
+	#ifndef _DEMO
 	FS_READ_TEXT,
+	#else
+	FS_READ_TEXT = 0,
+	#endif // not _DEMO
 	FS_WRITE_TEXT,
 	FS_APPEND_TEXT,
 	FS_APPEND_SYNC_TEXT
@@ -1216,6 +1222,10 @@ typedef struct {
 	int			surfaceFlags;	// surface hit
 	int			contents;	// contents on other side of surface hit
 	int			entityNum;	// entity the contacted sirface is a part of
+
+#ifdef _DEMO
+	CollisionRecord_t G2CollisionMap[MAX_G2_COLLISIONS];	// map that describes all of the parts of ghoul2 models that got hit
+#endif
 } trace_t;
 
 // calling defines for the trace function

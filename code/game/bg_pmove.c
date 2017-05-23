@@ -1573,11 +1573,11 @@ static void PM_Footsteps( void )
 			{
 				if ( pm->ps->leanTime - LEAN_TIME < 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_LEFT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_LEFT );	 // FIXME DEMO
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_RIGHT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_RIGHT );	// FIXME DEMO
 				}
 				else
 				{
@@ -1588,11 +1588,11 @@ static void PM_Footsteps( void )
 			{
 				if ( pm->ps->leanTime - LEAN_TIME < 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_LEFT );	
+					// PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_LEFT );	// FIXME DEMO
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_RIGHT );	
+					// PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_RIGHT );	// FIXME DEMO
 				}
 				else
 				{
@@ -1620,22 +1620,22 @@ static void PM_Footsteps( void )
 			{
 				if ( pm->cmd.rightmove > 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKRIGHT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKRIGHT );	// FIXME DEMO
 				}
 				else
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKLEFT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKLEFT );	// FIXME DEMO
 				}
 			}
 			else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 			{
 				if ( pm->cmd.rightmove > 0 )
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKRIGHT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKRIGHT );	// FIXME DEMO
 				}
 				else
 				{
-					PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKLEFT );	
+					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKLEFT );	// FIXME DEMO
 				}
 			}
 			else
@@ -1674,22 +1674,22 @@ static void PM_Footsteps( void )
 				{
 					if ( pm->cmd.rightmove > 0 )
 					{
-						PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKRIGHT );	
+						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKRIGHT );	// FIXME DEMO
 					}
 					else
 					{
-						PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKLEFT );	
+						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKLEFT );	// FIXME DEMO
 					}
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
 					if ( pm->cmd.rightmove > 0 )
 					{
-						PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKRIGHT );	
+						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKRIGHT );	// FIXME DEMO
 					}
 					else
 					{
-						PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKLEFT );	
+						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKLEFT );	// FIXME DEMO
 					}
 				}
 				else

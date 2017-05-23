@@ -36,10 +36,10 @@
 //#define	GAME_VERSION		"sof2mp-0.21"	sent on 4/22/2002
 //#define	GAME_VERSION		"sof2mp-1.00.22"	sent on 4/26/2002
 //#define	GAME_VERSION		"sof2mp-1.00.23"	sent on 4/27/2002
-#ifdef GERMAN_BUILD
-	#define	GAME_VERSION		"sof2mp-1.00g"
-#else
+#ifndef _DEMO
 	#define	GAME_VERSION		"sof2mp-1.00"
+#else
+	#define	GAME_VERSION		"sof2mp-1.02t"
 #endif
 
 #define	DEFAULT_GRAVITY		800
@@ -85,10 +85,9 @@
 // from the server to all connected clients.
 //
 
+#ifndef _DEMO
 // CS_SERVERINFO and CS_SYSTEMINFO are defined in q_shared.h
-
 #define	CS_PLAYERS				2
-
 enum
 {
 //	CS_SERVERINFO,
@@ -138,10 +137,9 @@ enum
 
 	CS_MAX					= CS_AMBIENT_SOUNDSETS + MAX_AMBIENT_SOUNDSETS
 };
-	
-/*
-#define	CS_MUSIC				68
-#define	CS_MESSAGE				69		// from the map worldspawn's message field
+#else
+#define	CS_MUSIC				2
+#define	CS_MESSAGE				3		// from the map worldspawn's message field
 #define	CS_MOTD					4		// g_motd string for server message of the day
 #define	CS_WARMUP				5		// server time when the match will be restarted
 #define CS_VOTE_TIME			8
@@ -165,20 +163,28 @@ enum
 
 // these are also in be_aas_def.h - argh (rjr)
 #define	CS_MODELS				32
-#define	CS_SOUNDS				(CS_MODELS+MAX_MODELS)
-#define CS_CHARSKINS 			(CS_PLAYERS+MAX_CLIENTS)
-#define CS_LOCATIONS			(CS_CHARSKINS+MAX_CHARSKINS)
-#define CS_LADDERS				(CS_LOCATIONS + MAX_LOCATIONS)
-#define CS_BSP_MODELS			(CS_LADDERS + MAX_LADDERS)
-#define CS_TERRAINS				(CS_BSP_MODELS + MAX_SUB_BSP)
-#define CS_EFFECTS				(CS_PARTICLES+MAX_LOCATIONS)
-#define	CS_LIGHT_STYLES			(CS_EFFECTS + MAX_FX)
-#define CS_ICONS				(CS_LIGHT_STYLES + (MAX_LIGHT_STYLES*3))
-#define CS_TEAM_INFO			(CS_ICONS+MAX_ICONS)
-#define CS_AMBIENT_SOUNDSETS	(CS_TEAM_INFO+TEAM_NUM_TEAMS)
+#define	CS_SOUNDS				(CS_MODELS+MAX_MODELS) // -> 288.
+#define CS_PLAYERS 				(CS_SOUNDS+MAX_SOUNDS) // -> 544.
+#define CS_LOCATIONS			(CS_PLAYERS+(MAX_CLIENTS*2))// -> 672.
+#define CS_LADDERS				(CS_LOCATIONS + MAX_LOCATIONS)// -> 736.
+// From this point it's a little gambling game. For now anyway.
+// Figure this out later.
+#define CS_BSP_MODELS			(CS_LADDERS + MAX_LADDERS)// -> ASSUME CORRECT: 800
+#define CS_TERRAINS				(CS_BSP_MODELS + MAX_SUB_BSP) // -> ASSUME CORRECT: 832
+#define CS_EFFECTS				(CS_TERRAINS+MAX_TERRAINS) // -> ASSUME CORRECT: 864
+//#define	CS_LIGHT_STYLES			(CS_EFFECTS + MAX_FX) // -> INCORRECT: 896 -> MUST BE 992.
+#define	CS_LIGHT_STYLES			992 // -> INCORRECT: 896 -> MUST BE 992.
+#define CS_ICONS				(CS_LIGHT_STYLES + (MAX_LIGHT_STYLES*3)) // -> CORRECT w/ previous fix -> 1184
+#define CS_TEAM_INFO			(CS_ICONS+MAX_ICONS) // -> ASSUME CORRECT: 1184
+#define CS_AMBIENT_SOUNDSETS	(CS_TEAM_INFO+TEAM_NUM_TEAMS) // -> ASSUME CORRECT: 1188
+// Missing.
+#define CS_PARTICLES			1200
+#define CS_PICKUPSDISABLED		1250
+#define CS_GAME_ID				1300
 
-#define CS_MAX					(CS_AMBIENT_SOUNDSETS+MAX_AMBIENT_SOUNDSETS)
-*/
+//#define CS_MAX					(CS_AMBIENT_SOUNDSETS+MAX_AMBIENT_SOUNDSETS) // 1248
+#define CS_MAX					1400
+#endif // not _DEMO
 
 #if (CS_MAX) > MAX_CONFIGSTRINGS
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
@@ -202,6 +208,7 @@ typedef enum
 {
 	BOTH_DEATH_NORMAL,
 
+	#ifndef _DEMO // FIXME: Copy whole block later on?
 	ANIM_START_DEATHS,
 
 	BOTH_DEATH_NECK,
@@ -231,6 +238,35 @@ typedef enum
 	BOTH_DEATH_SHOULDER_RIGHT_2,
 	BOTH_DEATH_THIGH_RIGHT_1,
 	BOTH_DEATH_THIGH_RIGHT_2,
+	#else
+	BOTH_DEATH_NECK,
+	BOTH_DEATH_CHEST_1,
+	BOTH_DEATH_CHEST_2,
+	BOTH_DEATH_GROIN_1,
+	BOTH_DEATH_GROIN_2,
+	BOTH_DEATH_GUT_1,
+	BOTH_DEATH_GUT_2,
+	BOTH_DEATH_HEAD_1,
+	BOTH_DEATH_HEAD_2,
+	BOTH_DEATH_SHOULDER_LEFT_1,
+	BOTH_DEATH_SHOULDER_LEFT_2,
+	BOTH_DEATH_ARMS_LEFT_1,
+	BOTH_DEATH_ARMS_LEFT_2,
+	BOTH_DEATH_LEGS_LEFT_1,
+	BOTH_DEATH_LEGS_LEFT_2,
+	BOTH_DEATH_LEGS_LEFT_3,
+	BOTH_DEATH_THIGH_LEFT_1,
+	BOTH_DEATH_THIGH_LEFT_2,
+	BOTH_DEATH_SHOULDER_RIGHT_1,
+	BOTH_DEATH_SHOULDER_RIGHT_2,
+	BOTH_DEATH_ARMS_RIGHT_1,
+	BOTH_DEATH_ARMS_RIGHT_2,
+	BOTH_DEATH_LEGS_RIGHT_1,
+	BOTH_DEATH_LEGS_RIGHT_2,
+	BOTH_DEATH_LEGS_RIGHT_3,
+	BOTH_DEATH_THIGH_RIGHT_1,
+	BOTH_DEATH_THIGH_RIGHT_2,
+	#endif // not _DEMO
 
 	ANIM_END_DEATHS,
 
@@ -258,6 +294,7 @@ typedef enum
 
 	LEGS_TURN,
 
+	#ifndef _DEMO
 	LEGS_LEAN_LEFT,
 	LEGS_LEAN_RIGHT,
 	LEGS_LEAN_CROUCH_LEFT,
@@ -272,6 +309,7 @@ typedef enum
 	LEGS_LEANLEFT_CROUCH_WALKRIGHT,
 	LEGS_LEANRIGHT_CROUCH_WALKLEFT,
 	LEGS_LEANRIGHT_CROUCH_WALKRIGHT,
+	#endif // not _DEMO
 
 	TORSO_IDLE_KNIFE,
 	TORSO_IDLE_PISTOL,
@@ -290,6 +328,9 @@ typedef enum
 	TORSO_ATTACK_KNIFE_THROW,
 	TORSO_ATTACK_PISTOL,
 	TORSO_ATTACK_RIFLE,
+	#ifdef _DEMO
+	TORSO_ATTACK_MSG90A1,
+	#endif // _DEMO
 	TORSO_ATTACK_MSG90A1_ZOOMED,
 	TORSO_ATTACK_M4,
 	TORSO_ATTACK_M590,
