@@ -3790,6 +3790,10 @@ change what you can see.
 */
 void PM_UpdatePVSOrigin ( pmove_t *pmove )
 {
+	#ifdef _DEMO
+	// FIXME DEMO
+	return;
+	#else
 	pm = pmove;
 
 	// Set a pm flag for leaning and calculate the view origin for the lean
@@ -3807,6 +3811,7 @@ void PM_UpdatePVSOrigin ( pmove_t *pmove )
 	{
 		VectorCopy ( pm->ps->origin, pm->ps->pvsOrigin );
 	}
+	#endif // _DEMO
 }
 
 /*

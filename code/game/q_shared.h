@@ -1372,13 +1372,13 @@ typedef struct {
 //=========================================================
 
 // bit field limits
-#define	MAX_STATS				16
-#define	MAX_PERSISTANT			16
-#define	MAX_AMMO				16
-#define	MAX_WEAPONS				32
+#define	MAX_STATS				16			// boe temp - confirm OK
+#define	MAX_PERSISTANT			16			// boe temp - confirm OK
+#define	MAX_AMMO				16			// boe temp - confirm OK
+#define	MAX_WEAPONS				32			// boe temp - confirm OK
 #define MAX_GAMETYPE_ITEMS		5
 
-#define	MAX_PS_EVENTS			4
+#define	MAX_PS_EVENTS			4			// boe temp - confirm OK
 
 #define PS_PMOVEFRAMECOUNTBITS	6
 
@@ -1427,6 +1427,9 @@ typedef struct playerState_s
 												// changed by spawns, rotating objects, and teleporters
 	int			groundEntityNum;				// ENTITYNUM_NONE = in air
 												
+	#ifdef _DEMO
+	int			legsTimer;						// don't change low priority animations until this runs out
+	#endif // _DEMO
 	int			legsAnim;						// mask off ANIM_TOGGLEBIT
 												
 	int			torsoTimer;						// don't change low priority animations until this runs out
@@ -1482,9 +1485,12 @@ typedef struct playerState_s
 	int			pmove_framecount;				// FIXME: don't transmit over the network
 	int			jumppad_frame;
 	int			entityEventSequence;
+	#ifndef _DEMO
+	// pvsOrigin is NOT present in DEMO.
 	vec3_t		pvsOrigin;						// view origin used to calculate PVS (also the lean origin)
 												// THIS VARIABLE MUST AT LEAST BE THE PLAYERS ORIGIN ALL OF THE 
 												// TIME OR THE PVS CALCULATIONS WILL NOT WORK.
+	#endif // not _DEMO
 
 	// Zooming
 	int			zoomTime;

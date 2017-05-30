@@ -77,7 +77,7 @@
 #define BODY_SINK_DELAY		10000
 #define BODY_SINK_TIME		1500
 
-#define LEAN_TIME			250
+#define LEAN_TIME			250			// boe temp - confirm OK
 #define LEAN_OFFSET			30
 
 //
