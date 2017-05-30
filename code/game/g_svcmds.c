@@ -352,7 +352,10 @@ void Svcmd_ExtendTime_f (void)
 	trap_Argv( 1, str, sizeof( str ) );
 
 	time = atoi(str);
+	#ifndef _DEMO
+	// FIXME DEMO
 	level.timeExtension += time;
+	#endif // not _DEMO
 
 	G_LogPrintf ( "timelimit extended by %d minutes\n", time );
 

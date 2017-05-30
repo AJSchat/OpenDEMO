@@ -460,6 +460,8 @@ void G_SetGametype ( const char* gametype )
 	bg_itemlist[MODELINDEX_BACKPACK].quantity = level.gametypeData->backpack;
 
 	// Set the pickup state
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( RMG.integer || g_pickupsDisabled.integer || level.gametypeData->pickupsDisabled )
 	{
 		level.pickupsDisabled = qtrue;
@@ -470,6 +472,7 @@ void G_SetGametype ( const char* gametype )
 		level.pickupsDisabled = qfalse;
 		trap_SetConfigstring ( CS_PICKUPSDISABLED, "0" );
 	}
+	#endif // _DEMO
 }
 
 /*
@@ -506,7 +509,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart )
 	G_SetGametype(g_gametype.string);
 
 	// Give the game a uniqe id
-	trap_SetConfigstring ( CS_GAME_ID, va("%d", randomSeed ) );
+	//trap_SetConfigstring ( CS_GAME_ID, va("%d", randomSeed ) );
 
 	if ( g_log.string[0] ) 
 	{
@@ -615,7 +618,12 @@ void G_InitGame( int levelTime, int randomSeed, int restart )
 	// Set the available outfitting
 	BG_SetAvailableOutfitting ( g_availableWeapons.string );
 
-	// Initialize the gametype 
+	// Initialize the gametype
+	#ifdef _DEMO
+	// Only do this for gametypes that have a valid script file.
+	// I.e. not DM or TDM.
+	if(strlen(level.gametypeData->script))
+	#endif // _DEMO
 	trap_GT_Init ( g_gametype.string, restart );
 
 	// Music
@@ -804,7 +812,7 @@ void CalculateRanks( void )
 	level.numConnectedClients = 0;
 	level.numNonSpectatorClients = 0;
 	level.numPlayingClients = 0;
-	level.numVotingClients = 0;		// don't count bots
+	//level.numVotingClients = 0;		// don't count bots BOE FIXME
 
 	for ( i = 0 ; i < level.maxclients ; i++ ) 
 	{
@@ -823,7 +831,7 @@ void CalculateRanks( void )
 					level.numPlayingClients++;
 					if ( !(g_entities[i].r.svFlags & SVF_BOT) ) 
 					{
-						level.numVotingClients++;
+						// level.numVotingClients++; // BOE FIXME
 					}
 					if ( level.follow1 == -1 ) 
 					{
@@ -1351,8 +1359,11 @@ void CheckExitRules( void )
 	// Check to see if the timelimit was hit
 	if ( g_timelimit.integer && !level.warmupTime ) 
 	{
+		#ifndef _DEMO
+		// FIXME DEMO
 		if ( level.time - level.startTime >= (g_timelimit.integer + level.timeExtension)*60000 ) 
 		{
+		#endif // not _DEMO
 			gentity_t* tent;
 			tent = G_TempEntity( vec3_origin, EV_GAME_OVER );
 			tent->s.eventParm = GAME_OVER_TIMELIMIT;
@@ -1360,7 +1371,9 @@ void CheckExitRules( void )
 
 			LogExit( "Timelimit hit." );
 			return;
+		#ifndef _DEMO
 		}
+		#endif // not _DEMO
 	}
 
 	// Check to see if the score was hit
@@ -1525,7 +1538,10 @@ void CheckVote( void )
 	}
 
 	// Update the needed clients
+	// Not present in demo.
+	#ifndef _DEMO
 	trap_SetConfigstring ( CS_VOTE_NEEDED, va("%i", (level.numVotingClients / 2) + 1 ) );
+	#endif // not _DEMO
 
 	if ( level.time - level.voteTime >= g_voteDuration.integer*1000 ) 
 	{
@@ -1534,6 +1550,7 @@ void CheckVote( void )
 	} 
 	else 
 	{
+		/*
 		if ( level.voteYes > level.numVotingClients/2 ) 
 		{
 			// execute the command, then remove the vote
@@ -1550,7 +1567,7 @@ void CheckVote( void )
 		{
 			// still waiting for a majority
 			return;
-		}
+		}*/ // BOE FIXME
 	}
 
 	level.voteTime = 0;

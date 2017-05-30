@@ -138,15 +138,17 @@ enum
 	CS_MAX					= CS_AMBIENT_SOUNDSETS + MAX_AMBIENT_SOUNDSETS
 };
 #else
-#define	CS_MUSIC				2
-#define	CS_MESSAGE				3		// from the map worldspawn's message field
-#define	CS_MOTD					4		// g_motd string for server message of the day
-#define	CS_WARMUP				5		// server time when the match will be restarted
-#define CS_VOTE_TIME			8
-#define CS_VOTE_STRING			9
-#define	CS_VOTE_YES				10
-#define	CS_VOTE_NO				11
-#define	CS_VOTE_NEEDED			12
+#define	CS_MUSIC				2		// boe temp - confirm OK
+#define	CS_MESSAGE				3		// from the map worldspawn's message field // boe temp - confirm OK
+#define	CS_MOTD					4		// g_motd string for server message of the day // boe temp - confirm OK
+#define	CS_WARMUP				5		// server time when the match will be restarted // boe temp - confirm OK
+#define CS_VOTE_TIME			8// boe temp - confirm OK
+#define CS_VOTE_STRING			9// boe temp - confirm OK
+#define	CS_VOTE_YES				10// boe temp - confirm OK
+#define	CS_VOTE_NO				11// boe temp - confirm OK
+/*
+#define	CS_VOTE_NEEDED			12// boe temp - confirn NOK. NOT present in demo!
+*/
 
 #define	CS_GAME_VERSION			16
 #define	CS_LEVEL_START_TIME		17		// so the timer only shows the current level
@@ -162,28 +164,24 @@ enum
 #define	CS_ITEMS				28		// string of 0's and 1's that tell which items are present
 
 // these are also in be_aas_def.h - argh (rjr)
-#define	CS_MODELS				32
-#define	CS_SOUNDS				(CS_MODELS+MAX_MODELS) // -> 288.
-#define CS_PLAYERS 				(CS_SOUNDS+MAX_SOUNDS) // -> 544.
-#define CS_LOCATIONS			(CS_PLAYERS+(MAX_CLIENTS*2))// -> 672.
-#define CS_LADDERS				(CS_LOCATIONS + MAX_LOCATIONS)// -> 736.
-// From this point it's a little gambling game. For now anyway.
-// Figure this out later.
-#define CS_BSP_MODELS			(CS_LADDERS + MAX_LADDERS)// -> ASSUME CORRECT: 800
-#define CS_TERRAINS				(CS_BSP_MODELS + MAX_SUB_BSP) // -> ASSUME CORRECT: 832
-#define CS_EFFECTS				(CS_TERRAINS+MAX_TERRAINS) // -> ASSUME CORRECT: 864
-//#define	CS_LIGHT_STYLES			(CS_EFFECTS + MAX_FX) // -> INCORRECT: 896 -> MUST BE 992.
-#define	CS_LIGHT_STYLES			992 // -> INCORRECT: 896 -> MUST BE 992.
-#define CS_ICONS				(CS_LIGHT_STYLES + (MAX_LIGHT_STYLES*3)) // -> CORRECT w/ previous fix -> 1184
-#define CS_TEAM_INFO			(CS_ICONS+MAX_ICONS) // -> ASSUME CORRECT: 1184
-#define CS_AMBIENT_SOUNDSETS	(CS_TEAM_INFO+TEAM_NUM_TEAMS) // -> ASSUME CORRECT: 1188
+#define	CS_MODELS				32// boe temp - confirm OK
+#define	CS_SOUNDS				(CS_MODELS+MAX_MODELS) // -> 288.// boe temp - confirm OK
+#define CS_PLAYERS 				(CS_SOUNDS+MAX_SOUNDS) // -> 544.// boe temp - confirm OK
+#define CS_LOCATIONS			(CS_PLAYERS+(MAX_CLIENTS*2))// -> 672.// boe temp - confirm OK
+#define CS_LADDERS				(CS_LOCATIONS + MAX_LOCATIONS)// -> 736.// boe temp - confirm OK
+#define CS_BSP_MODELS			(CS_LADDERS + MAX_LADDERS)// -> 800.// boe temp - confirm OK
+#define CS_TERRAINS				(CS_BSP_MODELS + MAX_SUB_BSP) // -> 832// boe temp - confirm OK
+#define CS_EFFECTS				(CS_TERRAINS+MAX_TERRAINS) // -> ASSUME CORRECT: 864 FALSE! 928 is CORRECT!!!! BOE (MAX_TERRAINS is 96 in this case, could be another infostring between there...)
+#define	CS_LIGHT_STYLES			(CS_EFFECTS + MAX_FX) // -> 992.// boe temp - confirm OK
+#define CS_ICONS				(CS_LIGHT_STYLES + (MAX_LIGHT_STYLES*3)) // -> CORRECT w/ previous fix -> 1184// boe temp - confirm OK (1184 is OK!!)
+#define CS_TEAM_INFO			(CS_ICONS+MAX_ICONS) // -> 1216 NOT!!!!!CONFIRMED (COULDNT FIND)
+#define CS_AMBIENT_SOUNDSETS	(CS_TEAM_INFO+TEAM_NUM_TEAMS) // -> 1220// boe temp - confirm OK
 // Missing.
-#define CS_PARTICLES			1200
-#define CS_PICKUPSDISABLED		1250
-#define CS_GAME_ID				1300
+//#define CS_PICKUPSDISABLED		1250
+//#define CS_GAME_ID				1300
 
-//#define CS_MAX					(CS_AMBIENT_SOUNDSETS+MAX_AMBIENT_SOUNDSETS) // 1248
-#define CS_MAX					1400
+#define CS_MAX					(CS_AMBIENT_SOUNDSETS+MAX_AMBIENT_SOUNDSETS) // 1284
+//#define CS_MAX					1400
 #endif // not _DEMO
 
 #if (CS_MAX) > MAX_CONFIGSTRINGS

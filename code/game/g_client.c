@@ -301,6 +301,11 @@ void G_InitBodyQueue (void)
 	gentity_t	*ent;
 	int			max;
 
+	#ifdef _DEMO
+	// FIXME DEMO
+	Com_Printf("[DEMO] G_InitBodyQueue is not yet implemented.\n");
+	return;
+	#else
 	if ( level.gametypeData->respawnType == RT_NONE )
 	{
 		level.bodySinkTime = 0;
@@ -322,6 +327,7 @@ void G_InitBodyQueue (void)
 		ent->neverFree = qtrue;
 		level.bodyQue[level.bodyQueSize] = ent;
 	}
+	#endif // _DEMO
 }
 
 /*
@@ -333,6 +339,8 @@ After sitting around for five seconds, fall into the ground and dissapear
 */
 void BodySink( gentity_t *ent ) 
 {
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( level.time - ent->timestamp > level.bodySinkTime + BODY_SINK_TIME ) 
 	{
 		// the body ques are never actually freed, they are just unlinked
@@ -345,6 +353,9 @@ void BodySink( gentity_t *ent )
 
 	ent->nextthink = level.time + 100;
 	ent->s.pos.trBase[2] -= 1;
+	#else
+	Com_Printf("[DEMO] BodySink is not yet implemented.\n");
+	#endif // not _DEMO
 }
 
 /*
@@ -372,7 +383,10 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 
 	// grab a body que and cycle to the next one
 	body = level.bodyQue[ level.bodyQueIndex ];
+	#ifndef _DEMO
+	// FIXME DEMO
 	level.bodyQueIndex = (level.bodyQueIndex + 1) % level.bodyQueSize;
+	#endif // not _DEMO
 
 	trap_UnlinkEntity (body);
 
@@ -416,6 +430,8 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 	body->r.contents = 0; // CONTENTS_CORPSE;
 	body->r.ownerNum = ent->s.number;
 
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( level.bodySinkTime )
 	{
 		body->nextthink = level.time + level.bodySinkTime;
@@ -424,10 +440,13 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 	}
 	else
 	{
+	#endif // not _DEMO
 		// Store the time the body was spawned so the client can make them
 		// dissapear if need be.
 		body->s.time2 = level.time;
+	#ifndef _DEMO
 	}
+	#endif // not _DEMO
 
 	body->die = body_die;
 	body->takedamage = qtrue;
@@ -1112,12 +1131,15 @@ void ClientUserinfoChanged( int clientNum )
 	}
 
 	// Outfitting if pickups are disabled
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( level.pickupsDisabled )
 	{
 		// Parse out the new outfitting
 		BG_DecompressOutfitting ( Info_ValueForKey ( userinfo, "outfitting" ), &client->pers.outfitting );
 		G_UpdateOutfitting ( clientNum );
 	}
+	#endif // not _DEMO
 
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
@@ -1133,7 +1155,7 @@ void ClientUserinfoChanged( int clientNum )
 			   client->pers.netname, team, client->pers.identity->mName );
 	}
 
-	trap_SetConfigstring( CS_PLAYERS+clientNum, s );
+	trap_SetConfigstring(CS_PLAYERS + clientNum, s );
 
 	G_LogPrintf( "ClientUserinfoChanged: %i %s\n", clientNum, s );
 }
@@ -1502,6 +1524,8 @@ void ClientSpawn(gentity_t *ent)
    	client->noOutfittingChange = qfalse;
 
 	// Give the client their weapons depending on whether or not pickups are enabled
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( level.pickupsDisabled )
 	{
 		G_UpdateOutfitting ( ent->s.number );
@@ -1511,6 +1535,7 @@ void ClientSpawn(gentity_t *ent)
 	}
 	else
 	{
+	#endif // not _DEMO
 		// Knife.
 		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_KNIFE );
 		ammoIndex=weaponData[WP_KNIFE].attack[ATTACK_NORMAL].ammoIndex;
@@ -1534,7 +1559,9 @@ void ClientSpawn(gentity_t *ent)
 
 		// Everyone gets full armor in deathmatch
 		client->ps.stats[STAT_ARMOR] = MAX_HEALTH;
+	#ifndef _DEMO
 	}
+	#endif // not _DEMO
 
 	client->ps.stats[STAT_HEALTH] = ent->health = MAX_HEALTH;
 
@@ -1561,6 +1588,8 @@ void ClientSpawn(gentity_t *ent)
 		trap_LinkEntity (ent);
 
 		// force the base weapon up
+		#ifndef _DEMO
+		// FIXME DEMO
 		if ( !level.pickupsDisabled )
 		{
 			client->ps.weapon = WP_USSOCOM_PISTOL;
@@ -1574,6 +1603,7 @@ void ClientSpawn(gentity_t *ent)
 			client->ps.weaponAnimIdChoice = 0;
 			client->ps.weaponCallbackStep = 0;
 		}
+		#endif // not _DEMO
 	}
 	else
 	{

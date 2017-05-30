@@ -1841,7 +1841,10 @@ void PM_CheckWeaponNotes ( void )
 	ps   = pm->ps;
 	aW   = BG_GetInviewAnimFromIndex ( ps->weapon, (ps->weaponAnimId&~ANIM_TOGGLEBIT) );
 
+	#ifndef _DEMO
+	// FIXME DEMO
 	assert ( aW );
+	#endif // not _DEMO
 	if ( !aW )
 	{
 		return;
@@ -1914,7 +1917,11 @@ void PM_SetWeaponAnimChoice(TAnimWeapon *aW)
 
 	if(!aW)
 	{
+		#ifndef _DEMO
+		// FIXME DEMO
 		assert(0);
+		#endif // not _DEMO
+
 		return;
 	}
 	

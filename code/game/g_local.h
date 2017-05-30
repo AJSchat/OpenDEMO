@@ -13,7 +13,9 @@
 // the "gameversion" client command will print this plus compile date
 #define	GAMEVERSION	"sof2mp"
 
+#ifndef _DEMO
 #define BODY_QUEUE_SIZE_MAX			MAX_CLIENTS
+#endif // not _DEMO
 #define BODY_QUEUE_SIZE				8
 
 #define INFINITE					1000000
@@ -432,7 +434,10 @@ typedef struct
 	int			voteYes;
 	int			voteNo;
 	int			voteClient;				// client who initiated vote
+	#ifndef _DEMO
+	// Not present in DEMO.
 	int			numVotingClients;		// set by CalculateRanks
+	#endif // not  _DEMO
 
 	// spawn variables
 	qboolean	spawning;				// the G_Spawn*() functions are valid
@@ -459,9 +464,16 @@ typedef struct
 
 	// body queue
 	int			bodyQueIndex;			// dead bodies
+	#ifndef _DEMO
+	// Not present in DEMO.
 	int			bodyQueSize;			// how many dead bodies can there be
 	int			bodySinkTime;
+
+	// This one is present in DEMO, but has a different size.
 	gentity_t	*bodyQue[BODY_QUEUE_SIZE_MAX];
+	#else
+	gentity_t	*bodyQue[BODY_QUEUE_SIZE];
+	#endif // not _DEMO
 
 	int			portalSequence;
 
@@ -492,9 +504,11 @@ typedef struct
 	gspawn_t		spawns[MAX_SPAWNS];
 	int				spawnCount;
 
+	#ifndef _DEMO
 	qboolean		pickupsDisabled;
 
 	int				timeExtension;
+	#endif // _DEMO
 
 } level_locals_t;
 

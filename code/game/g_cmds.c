@@ -1604,11 +1604,11 @@ void Cmd_CallVote_f( gentity_t *ent )
 		return;
 	}
 
-	if ( level.numConnectedClients > 1 && level.numVotingClients == 1 ) 
+	/*if ( level.numConnectedClients > 1 && level.numVotingClients == 1 ) 
 	{
 		trap_SendServerCommand( ent-g_entities, "print \"You need at least 2 clients to call a vote.\n\"" );
 		return;
-	}
+	}*/ // BOE FIXME
 
 	if ( level.voteTime ) 
 	{
@@ -1791,7 +1791,10 @@ void Cmd_CallVote_f( gentity_t *ent )
 	trap_SetConfigstring( CS_VOTE_STRING, level.voteDisplayString );	
 	trap_SetConfigstring( CS_VOTE_YES, va("%i", level.voteYes ) );
 	trap_SetConfigstring( CS_VOTE_NO, va("%i", level.voteNo ) );	
+	// BOE Note DEMO: The CS_VOTE_NEEDED is NOT present in demo, they simply do not show how many votes are needed.
+	#ifndef _DEMO
 	trap_SetConfigstring( CS_VOTE_NEEDED, va("%i", level.numVotingClients / 2 ) );
+	#endif // not _DEMO
 }
 
 /*

@@ -1326,7 +1326,7 @@ typedef enum {
 //
 #define	MAX_CLIENTS			64		// absolute limit
 #define MAX_LOCATIONS		64
-#define MAX_TERRAINS		32
+#define MAX_TERRAINS		96		// boe temp - NOT OK! FROM 32 to 96, OR(!) there's another config string in-between. BOE FIXME
 #define MAX_LADDERS			64
 
 #define MAX_INSTANCE_TYPES		16
@@ -1343,15 +1343,15 @@ typedef enum {
 
 
 // these are also in be_aas_def.h - argh (rjr)
-#define	MAX_MODELS				256		// these are sent over the net as 8 bits
-#define	MAX_SOUNDS				256		// so they cannot be blindly increased
-#define MAX_AMBIENT_SOUNDSETS	64
-#define MAX_FX					64		// max effects strings, I'm hoping that 64 will be plenty
-#define MAX_SUB_BSP				32
-#define MAX_ICONS				32
+#define	MAX_MODELS				256		// these are sent over the net as 8 bits// boe temp - confirm OK
+#define	MAX_SOUNDS				256		// so they cannot be blindly increased// boe temp - confirm OK
+#define MAX_AMBIENT_SOUNDSETS	64		// boe temp - confirm OK
+#define MAX_FX					64		// max effects strings, I'm hoping that 64 will be plenty// boe temp - confirm OK
+#define MAX_SUB_BSP				32		// boe temp - confirm OK
+#define MAX_ICONS				32		// boe temp - confirm OK
 #define	MAX_CHARSKINS			64		// character skins
 
-#define	MAX_CONFIGSTRINGS	1400
+#define	MAX_CONFIGSTRINGS		1400	// boe temp - confirm OK
 
 // these are the only configstrings that the system reserves, all the
 // other ones are strictly for servergame to clientgame communication
@@ -1606,7 +1606,12 @@ typedef struct entityState_s
 	int				otherEntityNum2;
 					
 	int				groundEntityNum;	// -1 = in air
-					
+
+	// Boe 25-5-17: TODO - reverse engineer this.
+	// Confirmed we're 4 bytes short in the demo structure.
+	// Comparing demo to Q3 this is the only original integer that a) makes sense and b) *could* be present during mp test.
+	// Adding this for now, it may be wrong, but at least we get the rest of the structure right, size-wise anyway.
+	int				constantLight;	// r + (g<<8) + (b<<16) + (intensity<<24)
 	int				loopSound;		// constantly loop this sound
 	int				mSoundSet;
 										

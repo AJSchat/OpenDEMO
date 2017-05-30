@@ -225,6 +225,8 @@ int Pickup_Backpack ( gentity_t* ent, gentity_t* other )
 	}
 
 	// Make sure you alwasy get grenades
+	#ifndef _DEMO
+	// FIXME DEMO
 	if ( level.pickupsDisabled )
 	{
 		weapon_t weapon = ps->stats[STAT_OUTFIT_GRENADE];
@@ -243,6 +245,7 @@ int Pickup_Backpack ( gentity_t* ent, gentity_t* other )
 			ps->clip[ATTACK_NORMAL][weapon] = weaponData[weapon].attack[ATTACK_NORMAL].clipSize;
 		}
 	}
+	#endif // not _DEMO
 
 	return g_backpackRespawn.integer;
 }
