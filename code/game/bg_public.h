@@ -176,9 +176,6 @@ enum
 #define CS_ICONS				(CS_LIGHT_STYLES + (MAX_LIGHT_STYLES*3)) // -> CORRECT w/ previous fix -> 1184// boe temp - confirm OK (1184 is OK!!)
 #define CS_TEAM_INFO			(CS_ICONS+MAX_ICONS) // -> 1216 NOT!!!!!CONFIRMED (COULDNT FIND)
 #define CS_AMBIENT_SOUNDSETS	(CS_TEAM_INFO+TEAM_NUM_TEAMS) // -> 1220// boe temp - confirm OK
-// Missing.
-//#define CS_PICKUPSDISABLED		1250
-//#define CS_GAME_ID				1300
 
 #define CS_MAX					(CS_AMBIENT_SOUNDSETS+MAX_AMBIENT_SOUNDSETS) // 1284
 //#define CS_MAX					1400
@@ -409,7 +406,7 @@ typedef enum {
 	WEAPON_CHARGING_ALT,
 	WEAPON_ZOOMIN,
 	WEAPON_ZOOMOUT,
-} weaponstate_t;
+} weaponstate_t; // temp boe - struct OK
 
 // pmove->pm_flags
 #define	PMF_DUCKED				0x00000001
@@ -438,9 +435,11 @@ typedef enum {
 #define PMF_GOGGLES_ON			0x00100000		// goggles are on
 #define PMF_LEANING				0x00200000		// currently leaning
 
+#ifndef _DEMO
 #define	PMF_AUTORELOAD			0x00400000		// autoreloading enabled
 
 #define	PMF_SIAMESETWINS		0x00800000	
+#endif // not _DEMO
 
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 #define PMF_ZOOM_FLAGS	(PMF_ZOOMED|PMF_ZOOM_LOCKED|PMF_ZOOM_REZOOM|PMF_ZOOM_DEFER_RELOAD)
@@ -455,7 +454,7 @@ typedef enum {
 #define PMD_GOGGLES				0x0020
 
 
-#define	MAXTOUCH	32
+#define	MAXTOUCH	32		// boe confirm OK
 
 typedef struct {
 	// state (in / out)
@@ -643,7 +642,10 @@ typedef enum
 	EV_WATER_FOOTSTEP,
 	EV_WATER_TOUCH,	// foot touches
 	EV_WATER_LAND,  // landed in water
+	#ifndef _DEMO
+	// Event not present in demo.
 	EV_WATER_CLEAR,
+	#endif // not _DEMO
 
 	EV_ITEM_PICKUP,			// normal item pickups are predictable
 
@@ -678,7 +680,10 @@ typedef enum
 	EV_BULLET_HIT_FLESH,
 	EV_BULLET,				// otherEntity is the shooter
 
+	#ifndef _DEMO
+	// Event not present in demo.
 	EV_EXPLOSION_HIT_FLESH,
+	#endif // not _DEMO
 
 	EV_PAIN,
 	EV_PAIN_WATER,
@@ -875,7 +880,7 @@ typedef enum
 	WACT_ZOOMOUT,
 	WACT_CHARGE,
 	WACT_ALTCHARGE
-} WACT;
+} WACT; // boe temp - struct OK
 
 
 #define ARENAS_PER_TIER		4

@@ -658,10 +658,13 @@ gentity_t* G_FireProjectile ( gentity_t *ent, weapon_t weapon, attackType_t atta
 		{
 			missile->s.pos.trType = TR_GRAVITY;
 		}
+		#ifndef _DEMO
+		// Not present in demo.
 		else if (flags & PROJECTILE_LIGHTGRAVITY)
 		{
 			missile->s.pos.trType = TR_LIGHTGRAVITY;
 		}
+		#endif // not _DEMO
 
 		if (flags & PROJECTILE_TIMED)
 		{	

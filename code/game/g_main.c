@@ -171,7 +171,12 @@ static cvarTable_t gameCvarTable[] =
 
 	{ &g_mapcycle,			"sv_mapcycle",		 "none",		CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse },
 
+	#ifndef _DEMO
 	{ &g_pickupsDisabled,	"g_pickupsDisabled", "0",					CVAR_ARCHIVE|CVAR_LATCH, 0.0, 0.0, 0, qfalse },
+	#else
+	// The client knows whether pickups are enabled or disabled through the server info in demo.
+	{ &g_pickupsDisabled,	"g_pickupsDisabled", "0",					CVAR_ARCHIVE|CVAR_LATCH|CVAR_SERVERINFO, 0.0, 0.0, 0, qfalse },
+	#endif // not _DEMO
 
 	{ &g_suicidePenalty,	"g_suicidePenalty",  "-1",					CVAR_ARCHIVE,	0.0f,	0.0f,	0,	qfalse },
 
@@ -460,19 +465,20 @@ void G_SetGametype ( const char* gametype )
 	bg_itemlist[MODELINDEX_BACKPACK].quantity = level.gametypeData->backpack;
 
 	// Set the pickup state
-	#ifndef _DEMO
-	// FIXME DEMO
 	if ( RMG.integer || g_pickupsDisabled.integer || level.gametypeData->pickupsDisabled )
 	{
 		level.pickupsDisabled = qtrue;
+		#ifndef _DEMO
 		trap_SetConfigstring ( CS_PICKUPSDISABLED, "1" );
+		#endif // not _DEMO
 	}
 	else
 	{
 		level.pickupsDisabled = qfalse;
+		#ifndef _DEMO
 		trap_SetConfigstring ( CS_PICKUPSDISABLED, "0" );
+		#endif // not _DEMO
 	}
-	#endif // _DEMO
 }
 
 /*
@@ -508,8 +514,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart )
 	// Set the current gametype
 	G_SetGametype(g_gametype.string);
 
+	#ifndef _DEMO
 	// Give the game a uniqe id
-	//trap_SetConfigstring ( CS_GAME_ID, va("%d", randomSeed ) );
+	trap_SetConfigstring ( CS_GAME_ID, va("%d", randomSeed ) );
+	#endif // not _DEMO
 
 	if ( g_log.string[0] ) 
 	{

@@ -335,6 +335,8 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace )
 					 ent->s.origin, ent->damage, ent->dflags, 
 					 ent->methodOfDeath, location );
 
+			#ifndef _DEMO
+			// Don't do this in demo, the client doesn't support it.
 			if ( d && other->client )
 			{
 				gentity_t *tent;
@@ -359,6 +361,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace )
 				VectorCopy ( other->r.currentOrigin, tent->s.angles );
 				SnapVector ( tent->s.angles );
 			}
+			#endif // not _DEMO
 		}
 	}
 
@@ -500,7 +503,11 @@ void G_RunMissile( gentity_t *ent )
 		}
 
 		// Above it only kills it if the item has no gravity
-		if ( origin[2] > level.worldMaxs[2] && ent->s.pos.trType != TR_GRAVITY && ent->s.pos.trType != TR_LIGHTGRAVITY)
+		if ( origin[2] > level.worldMaxs[2] && ent->s.pos.trType != TR_GRAVITY
+			#ifndef _DEMO
+			&& ent->s.pos.trType != TR_LIGHTGRAVITY
+			#endif // not _DEMO
+			)
 		{
 			G_FreeEntity( ent );
 			return;				

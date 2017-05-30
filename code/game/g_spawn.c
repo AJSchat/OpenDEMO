@@ -301,21 +301,15 @@ qboolean G_CallSpawn( gentity_t *ent )
 			}
 
 			// Make sure pickups arent disabled
-			#ifndef _DEMO
-			// FIXME DEMO
 			if ( !level.pickupsDisabled )
 			{
-			#endif // not _DEMO
 				G_SpawnItem( ent, item );
 				return qtrue;
-			#ifndef _DEMO
-			// FIXME DEMO
 			}
 			else
 			{	// Pickups dont spawn when disabled - this avoids the "doesn't have a spawn function" message
 				return qfalse;
 			}
-			#endif // not _DEMO
 		}
 	}
 

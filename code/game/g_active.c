@@ -193,6 +193,7 @@ void ClientImpacts( gentity_t *ent, pmove_t *pm ) {
 
 }
 
+#ifndef _DEMO
 /*
 ============
 G_IsClientSiameseTwin
@@ -245,6 +246,8 @@ static qboolean G_IsClientSiameseTwin ( gentity_t* ent, gentity_t* ent2 )
 	return qtrue;
 }
 
+#endif // not _DEMO
+
 /*
 ============
 G_TouchTriggers
@@ -291,7 +294,7 @@ void G_TouchTriggers( gentity_t *ent )
 	for ( i=0 ; i<num ; i++ ) 
 	{
 		hit = &g_entities[touch[i]];
-
+		#ifndef _DEMO
 		// pmove would have to have detected siamese twins first
 		if ( hit->client && hit != ent && !hit->client->siameseTwin && (ent->client->ps.pm_flags & PMF_SIAMESETWINS) )
 		{
@@ -305,6 +308,7 @@ void G_TouchTriggers( gentity_t *ent )
 			ent->client->siameseTwin = hit;
 			hit->client->siameseTwin = ent;
 		}
+		#endif // not _DEMO
 
 		if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) 
 		{
@@ -358,8 +362,10 @@ void G_TouchTriggers( gentity_t *ent )
 		}
 	}
 
+	#ifndef _DEMO
 	// Dont bother looking for twins again unless pmove says so
 	ent->client->ps.pm_flags &= (~PMF_SIAMESETWINS);
+	#endif // not _DEMO
 }
 
 
@@ -978,6 +984,7 @@ void ClientThink_real( gentity_t *ent )
 	{
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
 	}
+	#ifndef _DEMO
 	else if ( client->siameseTwin ) 
 	{
 		// Make sure we are still stuck, if so, clip through players.
@@ -994,6 +1001,7 @@ void ClientThink_real( gentity_t *ent )
 			pm.tracemask = MASK_PLAYERSOLID;
 		}
 	}
+	#endif // not _DEMO
 	else if ( ent->r.svFlags & SVF_BOT ) 
 	{
 		pm.tracemask = MASK_PLAYERSOLID | CONTENTS_BOTCLIP;

@@ -1246,11 +1246,14 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) 
 		}
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
 		break;
+	#ifndef _DEMO
+	// Not present in demo.
 	case TR_LIGHTGRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
 		result[2] -= 0.3f * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
 		break;
+	#endif // not _DEMO
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
@@ -1299,11 +1302,14 @@ void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 		}
 		VectorCopy( tr->trDelta, result );
 		break;
+	#ifndef _DEMO
+	// Not present in demo.
 	case TR_LIGHTGRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorCopy( tr->trDelta, result );
 		result[2] -= 0.6f * DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
 		break;
+	#endif // not _DEMO
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorCopy( tr->trDelta, result );

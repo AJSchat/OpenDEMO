@@ -253,7 +253,9 @@ typedef struct
 	qboolean			predictItemPickup;			// based on cg_predictItems userinfo
 	qboolean			pmoveFixed;					//
 	qboolean			antiLag;					// anti-lag on or off
+	#ifndef _DEMO
 	qboolean			autoReload;					// auto rellaod turned on or off
+	#endif // not _DEMO
 	char				netname[MAX_NETNAME];
 	char				deferredname[MAX_NETNAME];
 	int					netnameTime;				// Last time the name was changed
@@ -370,7 +372,9 @@ struct gclient_s
 	vec3_t			ghoulUpperTorsoAngles;
 	vec3_t			ghoulHeadAngles;
 
+	#ifndef _DEMO
 	gentity_t		*siameseTwin;
+	#endif // not _DEMO
 };
 
 
@@ -504,9 +508,9 @@ typedef struct
 	gspawn_t		spawns[MAX_SPAWNS];
 	int				spawnCount;
 
-	#ifndef _DEMO
 	qboolean		pickupsDisabled;
 
+	#ifndef _DEMO
 	int				timeExtension;
 	#endif // _DEMO
 

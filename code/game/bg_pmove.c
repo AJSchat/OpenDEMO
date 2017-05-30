@@ -1252,11 +1252,13 @@ static void PM_GroundTrace( void )
 	pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, point, pm->ps->clientNum, pm->tracemask);
 	pml.groundTrace = trace;
 
+	#ifndef _DEMO
 	// When stuck to antoher player set a flag to let the trigger code know so it can unstick the player
 	if ( (trace.allsolid || trace.startsolid) && trace.entityNum < MAX_CLIENTS ) 
 	{
 		pm->ps->pm_flags |= PMF_SIAMESETWINS;
 	}
+	#endif // not _DEMO
 
 	// if the trace didn't hit anything, we are in free fall
 	if ( trace.fraction == 1.0 ) {
@@ -1753,12 +1755,16 @@ static void PM_WaterEvents( void )
 		}
 	}
 
+	#ifndef _DEMO
+	// Not supported in demo.
+
 	//
 	// check for head just coming out of water
 	//
 	if (pml.previous_waterlevel == 3 && pm->waterlevel != 3) {
 		PM_AddEvent( EV_WATER_CLEAR );
 	}
+	#endif // not _DEMO
 }
 
 /*
@@ -3142,8 +3148,11 @@ static void PM_Weapon( void )
 		if( pm->ps->ammo[ attackData->ammoIndex ] > 0 ) 
 		{
 			// If auto reloading is enabled then reload the gun
+			#ifndef _DEMO
+			// In demo, auto reloading is always enabled.
 			if ( pm->ps->pm_flags & PMF_AUTORELOAD )
 			{
+			#endif // not _DEMO
 				switch ( attackData->fireFromClip)
 				{
 					case 1:
@@ -3156,7 +3165,9 @@ static void PM_Weapon( void )
 						PM_StartRefillClip( ATTACK_ALTERNATE );					
 						return;
 				}
+			#ifndef _DEMO
 			}
+			#endif // not _DEMO
 		}
 		// Out of ammo, switch weapons if not an alt-attack
 		else if ( !altFire )

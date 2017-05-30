@@ -998,6 +998,7 @@ void ClientUserinfoChanged( int clientNum )
 	s = Info_ValueForKey ( userinfo, "cg_antiLag" );
 	client->pers.antiLag = atoi( s )?qtrue:qfalse;
 
+	#ifndef _DEMO
 	// Is auto-reload turned on?
 	s = Info_ValueForKey ( userinfo, "cg_autoReload" );
 	client->pers.autoReload = atoi( s )?qtrue:qfalse;
@@ -1009,6 +1010,7 @@ void ClientUserinfoChanged( int clientNum )
 	{
 		client->ps.pm_flags &= ~PMF_AUTORELOAD;
 	}
+	#endif // not _DEMO
 
 	// set name
 	Q_strncpyz ( oldname, client->pers.netname, sizeof( oldname ) );
@@ -1131,15 +1133,12 @@ void ClientUserinfoChanged( int clientNum )
 	}
 
 	// Outfitting if pickups are disabled
-	#ifndef _DEMO
-	// FIXME DEMO
 	if ( level.pickupsDisabled )
 	{
 		// Parse out the new outfitting
 		BG_DecompressOutfitting ( Info_ValueForKey ( userinfo, "outfitting" ), &client->pers.outfitting );
 		G_UpdateOutfitting ( clientNum );
 	}
-	#endif // not _DEMO
 
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
@@ -1524,8 +1523,6 @@ void ClientSpawn(gentity_t *ent)
    	client->noOutfittingChange = qfalse;
 
 	// Give the client their weapons depending on whether or not pickups are enabled
-	#ifndef _DEMO
-	// FIXME DEMO
 	if ( level.pickupsDisabled )
 	{
 		G_UpdateOutfitting ( ent->s.number );
@@ -1535,7 +1532,6 @@ void ClientSpawn(gentity_t *ent)
 	}
 	else
 	{
-	#endif // not _DEMO
 		// Knife.
 		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_KNIFE );
 		ammoIndex=weaponData[WP_KNIFE].attack[ATTACK_NORMAL].ammoIndex;
@@ -1559,9 +1555,7 @@ void ClientSpawn(gentity_t *ent)
 
 		// Everyone gets full armor in deathmatch
 		client->ps.stats[STAT_ARMOR] = MAX_HEALTH;
-	#ifndef _DEMO
 	}
-	#endif // not _DEMO
 
 	client->ps.stats[STAT_HEALTH] = ent->health = MAX_HEALTH;
 
@@ -1570,6 +1564,7 @@ void ClientSpawn(gentity_t *ent)
 
 	// the respawned flag will be cleared after the attack and jump keys come up
 	client->ps.pm_flags |= PMF_RESPAWNED;
+	#ifndef _DEMO
 	if ( client->pers.autoReload )
 	{
 		client->ps.pm_flags |= PMF_AUTORELOAD;
@@ -1578,6 +1573,7 @@ void ClientSpawn(gentity_t *ent)
 	{
 		client->ps.pm_flags &= ~PMF_AUTORELOAD;
 	}
+	#endif // not _DEMO
 
 	trap_GetUsercmd( client - level.clients, &ent->client->pers.cmd );
 	SetClientViewAngle( ent, spawn_angles );
@@ -1588,8 +1584,6 @@ void ClientSpawn(gentity_t *ent)
 		trap_LinkEntity (ent);
 
 		// force the base weapon up
-		#ifndef _DEMO
-		// FIXME DEMO
 		if ( !level.pickupsDisabled )
 		{
 			client->ps.weapon = WP_USSOCOM_PISTOL;
@@ -1603,7 +1597,6 @@ void ClientSpawn(gentity_t *ent)
 			client->ps.weaponAnimIdChoice = 0;
 			client->ps.weaponCallbackStep = 0;
 		}
-		#endif // not _DEMO
 	}
 	else
 	{

@@ -284,11 +284,15 @@ static qboolean BG_ParseAttackStats ( int weaponNum, attackData_t* attack, void 
 				break;
 
 			case WP_KNIFE:
+				#ifndef _DEMO
 				if ( attack->weaponFlags & PROJECTILE_GRAVITY )
 				{
 					attack->weaponFlags &= ~PROJECTILE_GRAVITY;
 					attack->weaponFlags |= PROJECTILE_LIGHTGRAVITY;
 				}
+				#else
+				attack->weaponFlags |= PROJECTILE_GRAVITY;
+				#endif // not _DEMO
 				break;
 		}
 		trap_GPG_FindPairValue(sub, "mp_speed||speed", "0", tmpStr);

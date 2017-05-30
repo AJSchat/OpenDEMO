@@ -1572,7 +1572,10 @@ typedef enum {
 	TR_SINE,					// value = base + sin( time / duration ) * delta
 	TR_GRAVITY,
 	TR_HEAVYGRAVITY,
+	#ifndef _DEMO
+	// Not present in demo.
 	TR_LIGHTGRAVITY
+	#endif // not _DEMO
 } trType_t;
 
 typedef struct {
