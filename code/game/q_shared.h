@@ -1502,8 +1502,11 @@ typedef struct playerState_s
 
 	// Timers 
 	int			grenadeTimer;
+	#ifndef _DEMO
+	// Possibly not in demo, at least no refs anywhere.
+	// Would make sense, since it is only used in CTF which is *not* present in demo.
 	int			respawnTimer;
-
+	#endif // not _DEMO
 } playerState_t;
 
 
@@ -1616,11 +1619,9 @@ typedef struct entityState_s
 					
 	int				groundEntityNum;	// -1 = in air
 
-	// Boe 25-5-17: TODO - reverse engineer this.
-	// Confirmed we're 4 bytes short in the demo structure.
-	// Comparing demo to Q3 this is the only original integer that a) makes sense and b) *could* be present during mp test.
-	// Adding this for now, it may be wrong, but at least we get the rest of the structure right, size-wise anyway.
+	#ifdef _DEMO
 	int				constantLight;	// r + (g<<8) + (b<<16) + (intensity<<24)
+	#endif // not _DEMO
 	int				loopSound;		// constantly loop this sound
 	int				mSoundSet;
 										
@@ -1634,7 +1635,9 @@ typedef struct entityState_s
 	int				event;			// impulse events -- muzzle flashes, footsteps, etc
 	int				eventParm;
 
+	#ifndef _DEMO
 	int				generic1;
+	#endif // not _DEMO
 
 	// for players
 	// these fields are only transmitted for client entities!!!!!
@@ -1644,6 +1647,10 @@ typedef struct entityState_s
 	int				torsoAnim;		// mask off ANIM_TOGGLEBIT
 	int				torsoTimer;		// time the animation will play for
 	int				leanOffset;		// Lean direction
+
+	#ifdef _DEMO
+	int				generic1;
+	#endif // _DEMO
 } entityState_t;
 
 

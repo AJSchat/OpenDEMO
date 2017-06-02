@@ -374,6 +374,11 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 
 	trap_UnlinkEntity (ent);
 
+	#ifdef _DEMO
+	Com_Printf("[DEMO] CopyToBodyQue is not yet implemented.\n");
+	return;
+	#endif // _DEMO
+
 	// if client is in a nodrop area, don't leave the body
 	contents = trap_PointContents( ent->r.currentOrigin, -1 );
 	if ( contents & CONTENTS_NODROP ) 
@@ -485,6 +490,7 @@ void SetClientViewAngle( gentity_t *ent, vec3_t angle )
 	VectorCopy (ent->s.angles, ent->client->ps.viewangles);
 }
 
+#ifndef _DEMO
 /*
 ================
 G_SetRespawnTimer
@@ -501,6 +507,7 @@ void G_SetRespawnTimer ( gentity_t* ent )
 	// start the interval if its not already started
 	ent->client->ps.respawnTimer = level.gametypeRespawnTime[ent->client->sess.team] + 1000;
 }
+#endif // not _DEMO
 
 /*
 ================
@@ -520,6 +527,7 @@ void respawn( gentity_t *ent )
 
 	// When we get here the user has just accepted their fate and now
 	// needs to wait for the ability to respawn
+	#ifndef _DEMO
 	switch ( level.gametypeData->respawnType )
 	{
 		case RT_INTERVAL:
@@ -533,6 +541,12 @@ void respawn( gentity_t *ent )
 			ghost = qtrue;
 			break;
 	}
+	#else
+	if (level.gametypeData->respawnType == RT_NONE) {
+		// Turn into a ghost
+		ghost = qtrue;
+	}
+	#endif // not _DEMO
 
 	// If they are a ghost then give a health point, but dont respawn
 	if ( ghost )

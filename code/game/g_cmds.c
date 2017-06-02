@@ -723,12 +723,14 @@ void SetTeam( gentity_t *ent, char *s, const char* identity )
 	client->sess.spectatorState = specState;
 	client->sess.spectatorClient = specClient;
 
+	#ifndef _DEMO
 	// Always spawn into a ctf game using a respawn timer.
 	if ( team != TEAM_SPECTATOR && level.gametypeData->respawnType == RT_INTERVAL )
 	{
 		G_SetRespawnTimer ( ent );
 		ghost = qtrue;
 	}
+	#endif // not _DEMO
 
 	BroadcastTeamChange( client, oldTeam );
 

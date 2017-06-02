@@ -203,9 +203,9 @@ typedef enum
 {
 	BOTH_DEATH_NORMAL,
 
-	#ifndef _DEMO // FIXME: Copy whole block later on?
 	ANIM_START_DEATHS,
 
+	#ifndef _DEMO // FIXME: Copy whole block later on?
 	BOTH_DEATH_NECK,
 	BOTH_DEATH_CHEST_1,
 	BOTH_DEATH_CHEST_2,
@@ -354,7 +354,7 @@ typedef enum
 	TORSO_RELOAD_MM1_SHELL,
 	TORSO_RELOAD_MM1_END,
 
-	MAX_ANIMATIONS
+	MAX_ANIMATIONS		// Boe confirm 89 = OK.
 
 } animNumber_t;
 
@@ -438,7 +438,7 @@ typedef enum {
 #ifndef _DEMO
 #define	PMF_AUTORELOAD			0x00400000		// autoreloading enabled
 
-#define	PMF_SIAMESETWINS		0x00800000	
+#define	PMF_SIAMESETWINS		0x00800000
 #endif // not _DEMO
 
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
@@ -584,7 +584,7 @@ typedef enum
 #define EF_ALT_FIRING			0x00000100		// for alt-fires, mostly for lightning guns though
 #define	EF_MOVER_STOP			0x00000200		// will push otherwise
 #define	EF_TALK					0x00000400		// draw a talk balloon
-#define	EF_CONNECTION			0x00000800		// draw a connection trouble sprite
+#define	EF_CONNECTION			0x00000800		// draw a connection trouble sprite					// BOE confirm OK.
 #define	EF_VOTED				0x00001000		// already cast a vote
 #define	EF_ANGLE_OVERRIDE		0x00002000		// angle coming from the server is absolute
 #define EF_PERMANENT			0x00004000		// this entity is permanent and is never updated (sent only in the game state)
@@ -594,7 +594,7 @@ typedef enum
 
 #define EF_REDTEAM				0x00010000		// Red team only
 #define EF_BLUETEAM				0x00020000		// Blue team only
-#define	EF_INSKY				0x00040000		// In a sky brush
+#define	EF_INSKY				0x00040000		// In a sky brush									// BOE confirm OK.
 
 #define EF_GOGGLES				0x00080000		// goggles on or not
 
@@ -819,9 +819,9 @@ typedef enum
 {
 	ET_GENERAL,
 	ET_PLAYER,
-	ET_ITEM,
-	ET_MISSILE,
-	ET_MOVER,
+	ET_ITEM,	// boe confirm OK
+	ET_MISSILE,	// boe confirm OK
+	ET_MOVER, // Boe confirm OK
 	ET_BEAM,
 	ET_PORTAL,
 	ET_SPEAKER,
