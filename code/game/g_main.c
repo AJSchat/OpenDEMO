@@ -824,7 +824,7 @@ void CalculateRanks( void )
 	level.numConnectedClients = 0;
 	level.numNonSpectatorClients = 0;
 	level.numPlayingClients = 0;
-	//level.numVotingClients = 0;		// don't count bots BOE FIXME
+	level.numVotingClients = 0;		// don't count bots
 
 	for ( i = 0 ; i < level.maxclients ; i++ ) 
 	{
@@ -843,7 +843,7 @@ void CalculateRanks( void )
 					level.numPlayingClients++;
 					if ( !(g_entities[i].r.svFlags & SVF_BOT) ) 
 					{
-						// level.numVotingClients++; // BOE FIXME
+						level.numVotingClients++;
 					}
 					if ( level.follow1 == -1 ) 
 					{
@@ -1562,7 +1562,6 @@ void CheckVote( void )
 	} 
 	else 
 	{
-		/*
 		if ( level.voteYes > level.numVotingClients/2 ) 
 		{
 			// execute the command, then remove the vote
@@ -1579,7 +1578,7 @@ void CheckVote( void )
 		{
 			// still waiting for a majority
 			return;
-		}*/ // BOE FIXME
+		}
 	}
 
 	level.voteTime = 0;

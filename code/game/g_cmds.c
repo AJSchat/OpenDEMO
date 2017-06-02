@@ -1614,11 +1614,11 @@ void Cmd_CallVote_f( gentity_t *ent )
 		return;
 	}
 
-	/*if ( level.numConnectedClients > 1 && level.numVotingClients == 1 ) 
+	if ( level.numConnectedClients > 1 && level.numVotingClients == 1 )
 	{
 		trap_SendServerCommand( ent-g_entities, "print \"You need at least 2 clients to call a vote.\n\"" );
 		return;
-	}*/ // BOE FIXME
+	}
 
 	if ( level.voteTime ) 
 	{

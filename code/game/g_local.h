@@ -438,10 +438,7 @@ typedef struct
 	int			voteYes;
 	int			voteNo;
 	int			voteClient;				// client who initiated vote
-	#ifndef _DEMO
-	// Not present in DEMO.
 	int			numVotingClients;		// set by CalculateRanks
-	#endif // not  _DEMO
 
 	// spawn variables
 	qboolean	spawning;				// the G_Spawn*() functions are valid
