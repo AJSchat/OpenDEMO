@@ -1254,6 +1254,12 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot )
 		}
 	}
 
+	#ifdef _OPENDEMO
+	if(!isBot && firstTime) {
+		client->sess.firstTime = qtrue;
+	}
+	#endif // _OPENDEMO
+
 	// get and distribute relevent paramters
 	G_LogPrintf( "ClientConnect: %i\n", clientNum );
 	ClientUserinfoChanged( clientNum );

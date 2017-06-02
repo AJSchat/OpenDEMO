@@ -938,6 +938,37 @@ void ClientThink_real( gentity_t *ent )
 		return;
 	}
 
+	#ifdef _OPENDEMO
+	// Show info and motd in showcase mode.
+	if(client->sess.firstTime && !client->sess.motdStartTime && !level.intermissionQueued){
+		if(ucmd->buttons & BUTTON_ANY){
+			client->sess.motdStartTime = level.time;
+			client->sess.motdStopTime = level.time + 10000;
+			trap_SendServerCommand(ent-g_entities, "chat -1 \"Info: This server is running Open^eDEMO^7 - built on " __DATE__ "\n\"");
+			trap_SendServerCommand(ent-g_entities, "chat -1 \"Info: Please report any bugs to ^Zboe@1fxmod.org\n\"");
+
+			// Show the motd.
+			opendemo_showMotd(ent);
+		}
+	}
+
+	if(client->sess.motdStartTime){
+		// Make sure the motd is being broadcasted several times.
+		if (level.time >= client->sess.motdStartTime + 1000 && level.time < client->sess.motdStopTime - 3500) {
+			client->sess.motdStartTime += 1000;
+			opendemo_showMotd(ent);
+		}else if (level.time >= client->sess.motdStopTime){
+			// Finished broadcasting motd.
+			client->sess.motdStartTime = 0;
+			client->sess.motdStopTime = 0;
+			if(client->sess.firstTime){
+				client->sess.firstTime = qfalse;
+			}
+		}
+
+	}
+	#endif // _OPENDEMO
+
 	// spectators don't do much
 	if ( G_IsClientSpectating ( client ) ) 
 	{

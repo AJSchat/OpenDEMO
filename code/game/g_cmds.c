@@ -1983,6 +1983,13 @@ void ClientCommand( int clientNum ) {
 		Cmd_Vote_f (ent);
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+	#ifdef _OPENDEMO
+	else if (Q_stricmp(cmd, "motd") == 0 && !level.intermissionQueued){
+		ent->client->sess.motdStartTime = level.time;
+		ent->client->sess.motdStopTime = level.time + 7000;
+		opendemo_showMotd(ent);
+	}
+	#endif // _OPENDEMO
 
 #ifdef _SOF2_BOTS
 	else if (Q_stricmp (cmd, "addbot") == 0)

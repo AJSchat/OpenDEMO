@@ -235,6 +235,11 @@ typedef struct
 	int					teamkillForgiveTime;	// time when team damage will be forgivin
 	qboolean			noTeamChange;			// cant change teams when this is true (rt_none only)
 
+	#ifdef _OPENDEMO
+	qboolean			firstTime;
+	int					motdStartTime;
+	int					motdStopTime;
+	#endif // _OPENDEMO
 } clientSession_t;
 
 //
@@ -1156,3 +1161,9 @@ void G_UpdateClientAntiLag	( gentity_t* ent );
 void G_UndoAntiLag			( void );
 void G_ApplyAntiLag			( gentity_t* ref, qboolean enlargeHitBox );
 
+#ifdef _OPENDEMO
+//
+// opendemo.c
+//
+void	opendemo_showMotd	( gentity_t *ent );
+#endif // _OPENDEMO
