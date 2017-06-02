@@ -42,7 +42,11 @@ void DeathmatchScoreboardMessage( gentity_t *ent )
 		}
 	
 		Com_sprintf (entry, sizeof(entry),
-			" %i %i %i %i %i %i %i %i %i", 
+			#ifndef _DEMO
+			" %i %i %i %i %i %i %i %i %i",
+			#else
+			" %i %i %i %i %i %i %i %i",
+			#endif // not _DEMO
 			level.sortedClients[i],
 			cl->sess.score, 
 			cl->sess.kills, 
@@ -50,8 +54,12 @@ void DeathmatchScoreboardMessage( gentity_t *ent )
 			ping, 
 			(level.time - cl->pers.enterTime)/60000,
 			(cl->sess.ghost || cl->ps.pm_type == PM_DEAD) ? qtrue : qfalse,
+			#ifndef _DEMO
 			g_entities[level.sortedClients[i]].s.gametypeitems,
 			g_teamkillDamageMax.integer ? 100 * cl->sess.teamkillDamage / g_teamkillDamageMax.integer : 0
+			#else
+			g_entities[level.sortedClients[i]].s.gametypeitems
+			#endif // not _DEMO
 			);
 
 		j = strlen(entry);

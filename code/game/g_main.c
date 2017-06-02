@@ -76,7 +76,9 @@ vmCvar_t	g_mapcycle;
 vmCvar_t	g_pickupsDisabled;				// Whether or not pickups are available in a map (uses outfitting if not)
 vmCvar_t	g_suicidePenalty;				// Amount of score added for killing yourself (typically negative)
 vmCvar_t	g_teamkillPenalty;				// Amount of score added for killing a teammates (typically negative)
+#ifndef _DEMO
 vmCvar_t	g_teamkillDamageMax;			// max damage one can do to teammates before being kicked
+#endif // not _DEMO
 vmCvar_t	g_teamkillDamageForgive;		// amount of teamkill damage forgiven each minute
 vmCvar_t	g_voiceFloodCount;				// Number of voice messages in one minute to be concidered flooding
 vmCvar_t	g_voiceFloodPenalty;			// Amount of time a void flooder must wait before they can use voice again
@@ -184,7 +186,9 @@ static cvarTable_t gameCvarTable[] =
 	{ &g_voiceFloodPenalty,	"g_voiceFloodPenalty",	"60",				CVAR_ARCHIVE,	0.0f,	0.0f,	0,  qfalse },
 
 	{ &g_teamkillPenalty,		"g_teamkillPenalty",		"-1",		CVAR_ARCHIVE,	0.0f,	0.0f,	0,	qfalse },
+	#ifndef _DEMO
 	{ &g_teamkillDamageMax,		"g_teamkillDamageMax",		"300",		CVAR_ARCHIVE,	0.0f,	0.0f,	0,  qfalse },
+	#endif // not _DEMO
 	{ &g_teamkillDamageForgive,	"g_teamkillDamageForgive",	"50",		CVAR_ARCHIVE,	0.0f,	0.0f,	0,  qfalse },
 };
 
@@ -1755,7 +1759,9 @@ void G_RunFrame( int levelTime )
 		{
 			G_CheckClientTimeouts ( ent );
 			G_RunClient( ent );
+			#ifndef _DEMO
 			G_CheckClientTeamkill ( ent );
+			#endif // not _DEMO
 			continue;
 		}
 

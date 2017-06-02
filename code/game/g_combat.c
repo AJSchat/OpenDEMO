@@ -950,6 +950,7 @@ int G_Damage (
 	asave = CheckArmor (targ, take, dflags);
 	take -= asave;
 
+	#ifndef _DEMO
 	// Teamkill dmage thats not caused by a telefrag?
 	if ( g_teamkillDamageMax.integer && mod != MOD_TELEFRAG )
 	{
@@ -969,6 +970,7 @@ int G_Damage (
 			}
 		}
 	}
+	#endif // not _DEMO
 
 	// Output hits
 	if ( g_logHits.integer && attacker && targ && attacker->client && targ->client )

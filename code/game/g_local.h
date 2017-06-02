@@ -792,7 +792,9 @@ int			G_GametypeCommand					( int cmd, int arg0, int arg1, int arg2, int arg3, i
 // g_active.c
 //
 void G_CheckClientTimeouts	( gentity_t *ent );
+#ifndef _DEMO
 void G_CheckClientTeamkill	( gentity_t *ent );
+#endif // not _DEMO
 void ClientThink			( int clientNum );
 void ClientEndFrame			( gentity_t *ent );
 void G_RunClient			( gentity_t *ent );
@@ -921,7 +923,9 @@ extern  vmCvar_t	g_mapcycle;
 extern	vmCvar_t	g_pickupsDisabled;
 extern	vmCvar_t	g_suicidePenalty;
 extern	vmCvar_t	g_teamkillPenalty;
+#ifndef _DEMO
 extern	vmCvar_t	g_teamkillDamageMax;
+#endif // not _DEMO
 extern	vmCvar_t	g_teamkillDamageForgive;
 extern	vmCvar_t	g_voiceFloodCount;
 extern	vmCvar_t	g_voiceFloodPenalty;

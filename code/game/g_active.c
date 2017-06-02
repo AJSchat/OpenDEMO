@@ -1134,6 +1134,7 @@ void ClientThink_real( gentity_t *ent )
 	ClientTimerActions( ent, msec );
 }
 
+#ifndef _DEMO
 /*
 ==================
 G_CheckClientTeamkill
@@ -1178,6 +1179,7 @@ void G_CheckClientTeamkill ( gentity_t* ent )
 	// Buh bye
 	trap_SendConsoleCommand( EXEC_INSERT, va("clientkick \"%d\" \"team killing\"\n", ent->s.number ) );
 }
+#endif // not _DEMO
 
 /*
 ==================
