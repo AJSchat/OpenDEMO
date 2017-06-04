@@ -1,6 +1,6 @@
 // Copyright (C) 2017 Boe!Man.
 //
-// opendemo.c - Special file embedded when server is built with the _OPENDEMO mode. Used in test OpenDEMO builds.
+// opendemo.c - Special file embedded when server is built with the _OPENDEMO preprocessor definition. Used in test OpenDEMO builds.
 
 #ifdef _OPENDEMO
 #include "g_local.h"

@@ -409,6 +409,7 @@ typedef enum {
 } weaponstate_t; // temp boe - struct OK
 
 // pmove->pm_flags
+// boe demo OK
 #define	PMF_DUCKED				0x00000001
 #define	PMF_BACKWARDS_JUMP		0x00000002		// go into backwards land
 #define PMF_JUMPING				0x00000004		// executing a jump
@@ -423,9 +424,10 @@ typedef enum {
 #define	PMF_GHOST				0x00000800		// Your a ghost. scarry!!
 #define PMF_LADDER				0x00001000		// On a ladder
 #define PMF_LADDER_JUMP			0x00002000		// Jumped off a ladder
-								
+
+#ifndef _DEMO
 #define PMF_ZOOMED				0x00004000
-#define PMF_ZOOM_LOCKED			0x00008000		// Zoom mode cant be changed 
+#define PMF_ZOOM_LOCKED			0x00008000		// Zoom mode cant be changed
 #define PMF_ZOOM_REZOOM			0x00010000		// Rezoom after reload done
 #define PMF_ZOOM_DEFER_RELOAD	0x00020000		// Reload after zoomout
 
@@ -435,17 +437,29 @@ typedef enum {
 #define PMF_GOGGLES_ON			0x00100000		// goggles are on
 #define PMF_LEANING				0x00200000		// currently leaning
 
-#ifndef _DEMO
 #define	PMF_AUTORELOAD			0x00400000		// autoreloading enabled
 
 #define	PMF_SIAMESETWINS		0x00800000
-#endif // not _DEMO
 
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 #define PMF_ZOOM_FLAGS	(PMF_ZOOMED|PMF_ZOOM_LOCKED|PMF_ZOOM_REZOOM|PMF_ZOOM_DEFER_RELOAD)
+#else
+#define PMF_ZOOM_LOCKED			0x00004000		// Zoom mode cant be changed
+#define PMF_ZOOM_REZOOM			0x00008000		// Rezoom after reload done
+#define PMF_ZOOM_DEFER_RELOAD	0x00010000		// Reload after zoomout
+
+#define	PMF_LIMITED_INVENTORY	0x00020000		// inventory is limited for this player
+
+#define PMF_CROUCH_JUMP			0x00040000		// crouch jumping
+#define PMF_GOGGLES_ON			0x00080000		// goggles are on
+#define PMF_LEANING				0x00100000		// currently leaning
+
+#define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
+#define PMF_ZOOM_FLAGS	(PMF_ZOOM_LOCKED|PMF_ZOOM_REZOOM|PMF_ZOOM_DEFER_RELOAD)
+#endif // not _DEMO
 
 // pmove->pm_debounce
-
+// boe PMD_GOGGLES was ok, so guess OK.
 #define PMD_JUMP				0x0001
 #define PMD_ATTACK				0x0002
 #define PMD_FIREMODE			0x0004

@@ -143,7 +143,11 @@ void PM_TorsoAnimation( playerState_t* ps )
 	{
 		case WEAPON_SPAWNING:
 		case WEAPON_READY:
+			#ifndef _DEMO
 			if ( (ps->pm_flags & PMF_ZOOMED) && weaponData[ps->weapon].animIdleZoomed )
+			#else
+			if (ps->zoomFov && weaponData[ps->weapon].animIdleZoomed)
+			#endif // _DEMO
 			{
 				PM_ContinueTorsoAnim ( ps, weaponData[ps->weapon].animIdleZoomed );
 			}

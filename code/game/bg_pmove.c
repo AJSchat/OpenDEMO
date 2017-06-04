@@ -711,7 +711,14 @@ static void PM_WalkMove( void ) {
 
 	if ( PM_CheckJump () )
 	{
-		PM_BeginZoomOut ( );
+		#ifdef _DEMO
+		// Zoom out if we're zoomed in.
+		if (pm->ps->zoomFov) {
+			PM_BeginZoomOut();
+		}
+		#else
+		PM_BeginZoomOut();
+		#endif // _DEMO
 
 		// jumped away
 		if ( pm->waterlevel > 1 ) 
@@ -1650,7 +1657,14 @@ static void PM_Footsteps( void )
 	{
 		if ( !( pm->cmd.buttons & BUTTON_WALKING ) )
 		{
-			PM_BeginZoomOut ( );
+			#ifdef _DEMO
+			// Zoom out if we're zoomed in.
+			if (pm->ps->zoomFov) {
+				PM_BeginZoomOut();
+			}
+			#else
+			PM_BeginZoomOut();
+			#endif // _DEMO
 
 			bobmove = 0.4f;	// faster speeds bob faster
 			if ( pm->ps->pm_flags & PMF_BACKWARDS_RUN ) 
@@ -2171,11 +2185,13 @@ PM_BeginZoomIn
 */
 static void PM_BeginZoomIn(void)
 {
+	#ifndef _DEMO
 	// Reset the zom fov if not rezooming
 	if ( !(pm->ps->pm_flags & PMF_ZOOM_REZOOM) )
 	{
 		pm->ps->zoomFov = 0;
 	}
+	#endif // not _DEMO
 
 	pm->ps->weaponstate=WEAPON_ZOOMIN;
 	PM_HandleWeaponAction(WACT_ZOOMIN);
@@ -2188,20 +2204,28 @@ PM_BeginZoomOut
 */
 static void PM_BeginZoomOut(void)
 {
+	#ifndef _DEMO
 	if ( !(pm->ps->pm_flags & PMF_ZOOMED) )
 	{
 		return;
 	}
 
-	if ( !(pm->ps->pm_flags & PMF_ZOOM_DEFER_RELOAD ) )
+	if (!(pm->ps->pm_flags & PMF_ZOOM_DEFER_RELOAD))
 	{
 		pm->ps->zoomFov = 0;
 	}
+	#else
+	pm->ps->zoomFov = 0;
+	#endif // not _DEMO
 
 	pm->ps->weaponstate=WEAPON_ZOOMOUT;
 	PM_HandleWeaponAction(WACT_ZOOMOUT);
 	pm->ps->zoomTime=pm->ps->commandTime;
+	#ifndef _DEMO
 	pm->ps->pm_flags &= ~(PMF_ZOOM_LOCKED|PMF_ZOOM_REZOOM|PMF_ZOOMED);
+	#else
+	pm->ps->pm_flags &= ~(PMF_ZOOM_LOCKED | PMF_ZOOM_REZOOM);
+	#endif // not _DEMO
 }
 
 
@@ -2243,7 +2267,11 @@ static void PM_BeginWeaponChange(int weapon)
 	}
 
 	// turn off any kind of zooming when weapon switching.
+	#ifndef _DEMO
 	if( pm->ps->pm_flags & PMF_ZOOMED )
+	#else
+	if(pm->ps->zoomFov)
+	#endif // not _DEMO
 	{
 		pm->ps->zoomFov	  = 0;
 		pm->ps->zoomTime  = pm->ps->commandTime;
@@ -2341,7 +2369,11 @@ void PM_StartRefillClip ( attackType_t attack )
 	assert ( attack >= ATTACK_NORMAL && attack < ATTACK_MAX );
 
 	// Sniper rifle should unzoom first before reloading.
+	#ifndef _DEMO
 	if( pm->ps->pm_flags & PMF_ZOOMED )
+	#else
+	if(pm->ps->zoomFov)
+	#endif // not _DEMO
 	{
 		pm->ps->pm_flags |= PMF_ZOOM_DEFER_RELOAD;
 		PM_BeginZoomOut();
@@ -2524,7 +2556,11 @@ static void PM_Weapon_AddInaccuracy( attackType_t attack )
 	assert ( attack >= ATTACK_NORMAL && attack < ATTACK_MAX );
 
 	// Zoomed sniper weapons don't add innacuracy if ont hte ground
+	#ifndef _DEMO
 	if( (pm->ps->pm_flags & PMF_ZOOMED) && pml.groundPlane )
+	#else
+	if(pm->ps->zoomFov && pml.groundPlane)
+	#endif // _not DEMO
 	{
 		return;
 	}
@@ -2689,7 +2725,11 @@ static void PM_Goggles ( void )
 	if ( pm->ps->stats[STAT_GOGGLES] == GOGGLES_INFRARED )
 	{
 		// If the player is zoomed then no goggles
+		#ifndef _DEMO
 		if ( pm->ps->pm_flags & PMF_ZOOMED )
+		#else
+		if(pm->ps->zoomFov)
+		#endif // not _DEMO
 		{
 			pm->ps->pm_flags &= ~PMF_GOGGLES_ON;
 			return;
@@ -2869,13 +2909,19 @@ static void PM_Weapon( void )
 	// Zoom in animation complete... now set zoom parms.
 	if( pm->ps->weaponstate == WEAPON_ZOOMIN )
 	{
+		#ifndef _DEMO
 		// The zoomfov may still be remembered from a reload while zooming
 		if ( !pm->ps->zoomFov )
 		{
 			pm->ps->zoomFov = 20;
 		}
+		#endif // not _DEMO
 
+		#ifndef _DEMO
 		pm->ps->pm_flags |= PMF_ZOOMED;
+		#else
+		pm->ps->zoomFov = 20;
+		#endif // not _DEMO
 		pm->ps->pm_flags |= PMF_ZOOM_LOCKED;
 		pm->ps->pm_flags &= ~PMF_ZOOM_REZOOM;
 		pm->ps->weaponstate=WEAPON_READY;
@@ -3046,7 +3092,11 @@ static void PM_Weapon( void )
 	{
 		if( (attackButtons&BUTTON_ALT_ATTACK) || (pm->ps->pm_flags & PMF_ZOOM_REZOOM) )
 		{
+			#ifndef _DEMO
 			if( pm->ps->pm_flags & PMF_ZOOMED )
+			#else
+			if(pm->ps->zoomFov)
+			#endif // not _DEMO
 			{
 				PM_BeginZoomOut();
 			}
@@ -3056,7 +3106,11 @@ static void PM_Weapon( void )
 			}			
 			return;
 		}
+		#ifndef _DEMO
 		else if( pm->ps->pm_flags & PMF_ZOOMED )
+		#else
+		else if(pm->ps->zoomFov)
+		#endif // not _DEMO
 		{
 			if(pm->cmd.buttons&BUTTON_ZOOMIN)
 			{
@@ -3264,7 +3318,11 @@ static void PM_Weapon( void )
 			pm->ps->weaponTime += attackData->fireDelay;
 
 			// Play the torso animation associated with the attack
+			#ifndef _DEMO
 			if ( pm->ps->pm_flags & PMF_ZOOMED )
+			#else
+			if(pm->ps->zoomFov)
+			#endif // not _DEMO
 			{
 				PM_StartTorsoAnim ( pm->ps, attackData->animFireZoomed, pm->ps->weaponTime );	
 			}
@@ -3570,8 +3628,13 @@ void PmoveSingle (pmove_t *pmove) {
 	}
 	
 	// Cant run when zoomed
-	if ( (pm->ps->pm_flags&PMF_ZOOMED) || pm->ps->weaponstate == WEAPON_ZOOMIN || (pm->cmd.buttons & (BUTTON_LEAN_LEFT|BUTTON_LEAN_RIGHT)) )
-	{
+	#ifndef _DEMO
+	if((pm->ps->pm_flags & PMF_ZOOMED)
+	#else
+	if(pm->ps->zoomFov
+	#endif // not _DEMO
+		|| pm->ps->weaponstate == WEAPON_ZOOMIN || (pm->cmd.buttons & (BUTTON_LEAN_LEFT|BUTTON_LEAN_RIGHT))
+	){
 		if ( pm->cmd.forwardmove > 64 )
 		{
 			pm->cmd.forwardmove = 64;

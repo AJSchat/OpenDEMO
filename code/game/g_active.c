@@ -939,7 +939,7 @@ void ClientThink_real( gentity_t *ent )
 	}
 
 	#ifdef _OPENDEMO
-	// Show info and motd in showcase mode.
+	// Show info and motd in OpenDEMO test builds.
 	if(client->sess.firstTime && !client->sess.motdStartTime && !level.intermissionQueued){
 		if(ucmd->buttons & BUTTON_ANY){
 			client->sess.motdStartTime = level.time;
