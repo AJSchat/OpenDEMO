@@ -711,14 +711,7 @@ static void PM_WalkMove( void ) {
 
 	if ( PM_CheckJump () )
 	{
-		#ifdef _DEMO
-		// Zoom out if we're zoomed in.
-		if (pm->ps->zoomFov) {
-			PM_BeginZoomOut();
-		}
-		#else
 		PM_BeginZoomOut();
-		#endif // _DEMO
 
 		// jumped away
 		if ( pm->waterlevel > 1 ) 
@@ -1657,14 +1650,7 @@ static void PM_Footsteps( void )
 	{
 		if ( !( pm->cmd.buttons & BUTTON_WALKING ) )
 		{
-			#ifdef _DEMO
-			// Zoom out if we're zoomed in.
-			if (pm->ps->zoomFov) {
-				PM_BeginZoomOut();
-			}
-			#else
 			PM_BeginZoomOut();
-			#endif // _DEMO
 
 			bobmove = 0.4f;	// faster speeds bob faster
 			if ( pm->ps->pm_flags & PMF_BACKWARDS_RUN ) 
@@ -2215,6 +2201,11 @@ static void PM_BeginZoomOut(void)
 		pm->ps->zoomFov = 0;
 	}
 	#else
+	// We need to be zoomed in for the player to zoom out.
+	if(!pm->ps->zoomFov){
+		return;
+	}
+
 	pm->ps->zoomFov = 0;
 	#endif // not _DEMO
 
@@ -2915,9 +2906,7 @@ static void PM_Weapon( void )
 		{
 			pm->ps->zoomFov = 20;
 		}
-		#endif // not _DEMO
 
-		#ifndef _DEMO
 		pm->ps->pm_flags |= PMF_ZOOMED;
 		#else
 		pm->ps->zoomFov = 20;
