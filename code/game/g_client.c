@@ -299,13 +299,10 @@ G_InitBodyQueue
 void G_InitBodyQueue (void) 
 {
 	gentity_t	*ent;
+
+	#ifndef _DEMO
 	int			max;
 
-	#ifdef _DEMO
-	// FIXME DEMO
-	Com_Printf("[DEMO] G_InitBodyQueue is not yet implemented.\n");
-	return;
-	#else
 	if ( level.gametypeData->respawnType == RT_NONE )
 	{
 		level.bodySinkTime = 0;
@@ -327,7 +324,18 @@ void G_InitBodyQueue (void)
 		ent->neverFree = qtrue;
 		level.bodyQue[level.bodyQueSize] = ent;
 	}
-	#endif // _DEMO
+	#else
+	int			i;
+
+	level.bodyQueIndex = 0;
+
+	for (i = 0; i < BODY_QUEUE_SIZE; i++){
+		ent = G_Spawn();
+		ent->classname = "bodyque";
+		ent->neverFree = qtrue;
+		level.bodyQue[i] = ent;
+	}
+	#endif // not _DEMO
 }
 
 /*
@@ -340,8 +348,10 @@ After sitting around for five seconds, fall into the ground and dissapear
 void BodySink( gentity_t *ent ) 
 {
 	#ifndef _DEMO
-	// FIXME DEMO
 	if ( level.time - ent->timestamp > level.bodySinkTime + BODY_SINK_TIME ) 
+	#else
+	if (level.time - ent->timestamp > BODY_SINK_DELAY + BODY_SINK_TIME)
+	#endif // not _DEMO
 	{
 		// the body ques are never actually freed, they are just unlinked
 		trap_UnlinkEntity( ent );
@@ -353,9 +363,6 @@ void BodySink( gentity_t *ent )
 
 	ent->nextthink = level.time + 100;
 	ent->s.pos.trBase[2] -= 1;
-	#else
-	Com_Printf("[DEMO] BodySink is not yet implemented.\n");
-	#endif // not _DEMO
 }
 
 /*
@@ -374,11 +381,6 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 
 	trap_UnlinkEntity (ent);
 
-	#ifdef _DEMO
-	Com_Printf("[DEMO] CopyToBodyQue is not yet implemented.\n");
-	return;
-	#endif // _DEMO
-
 	// if client is in a nodrop area, don't leave the body
 	contents = trap_PointContents( ent->r.currentOrigin, -1 );
 	if ( contents & CONTENTS_NODROP ) 
@@ -389,8 +391,9 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 	// grab a body que and cycle to the next one
 	body = level.bodyQue[ level.bodyQueIndex ];
 	#ifndef _DEMO
-	// FIXME DEMO
 	level.bodyQueIndex = (level.bodyQueIndex + 1) % level.bodyQueSize;
+	#else
+	level.bodyQueIndex = (level.bodyQueIndex + 1) % BODY_QUEUE_SIZE;
 	#endif // not _DEMO
 
 	trap_UnlinkEntity (body);
@@ -436,7 +439,6 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 	body->r.ownerNum = ent->s.number;
 
 	#ifndef _DEMO
-	// FIXME DEMO
 	if ( level.bodySinkTime )
 	{
 		body->nextthink = level.time + level.bodySinkTime;
@@ -445,12 +447,13 @@ void CopyToBodyQue( gentity_t *ent, int hitLocation, vec3_t direction )
 	}
 	else
 	{
-	#endif // not _DEMO
 		// Store the time the body was spawned so the client can make them
 		// dissapear if need be.
 		body->s.time2 = level.time;
-	#ifndef _DEMO
 	}
+	#else
+	body->nextthink = level.time + BODY_SINK_DELAY;
+	body->think = BodySink;
 	#endif // not _DEMO
 
 	body->die = body_die;
