@@ -1207,7 +1207,9 @@ typedef struct
 
 #define MAX_G2_COLLISIONS 16
 
+#ifndef _DEMO
 typedef CollisionRecord_t G2Trace_t[MAX_G2_COLLISIONS];	// map that describes all of the parts of ghoul2 models that got hit
+#endif // not _DEMO
 
 /*
 Ghoul2 Insert End

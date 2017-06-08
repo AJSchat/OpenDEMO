@@ -78,7 +78,7 @@
 #define BODY_SINK_TIME		1500
 
 #define LEAN_TIME			250			// boe temp - confirm OK
-#define LEAN_OFFSET			30
+#define LEAN_OFFSET			30			// boe temp - assume OK
 
 //
 // config strings are a general means of communicating variable length strings
@@ -823,7 +823,11 @@ qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 #define	MASK_DEADSOLID			(CONTENTS_SOLID|CONTENTS_TERRAIN|CONTENTS_PLAYERCLIP)
 #define	MASK_WATER				(CONTENTS_WATER)
 #define	MASK_OPAQUE				(CONTENTS_SOLID|CONTENTS_TERRAIN|CONTENTS_SLIME|CONTENTS_LAVA)
+#ifndef _DEMO
 #define	MASK_SHOT				(CONTENTS_SOLID|CONTENTS_TERRAIN|CONTENTS_BODY|CONTENTS_SHOTCLIP)
+#else
+#define	MASK_SHOT				(CONTENTS_SOLID|CONTENTS_BODY)
+#endif // not _DEMO
 
 
 //
