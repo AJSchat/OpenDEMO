@@ -19,10 +19,12 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace )
 	int		hitTime;
 
 	// nothing to do if already stationary
+	#ifndef _DEMO
 	if ( ent->s.pos.trType == TR_STATIONARY )
 	{
 		return;
 	}
+	#endif // not _DEMO
 
 	// reflect the velocity on the trace plane
 	hitTime = level.previousTime + ( level.time - level.previousTime ) * trace->fraction;

@@ -709,7 +709,7 @@ gentity_t* G_FireProjectile ( gentity_t *ent, weapon_t weapon, attackType_t atta
 		#ifndef _DEMO
 		missile->clipmask = MASK_SHOT | CONTENTS_MISSILECLIP;
 		#else
-		missile->clipmask = MASK_SHOT;
+		missile->clipmask = (MASK_PLAYERSOLID | CONTENTS_CORPSE)&(~CONTENTS_PLAYERCLIP);
 		#endif // not _DEMO
 		if(attackDat->splashRadius)
 		{

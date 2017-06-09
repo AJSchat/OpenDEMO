@@ -273,8 +273,13 @@ static qboolean BG_ParseAttackStats ( int weaponNum, attackData_t* attack, void 
 		if (0 == Q_stricmp(tmpStr,"timer"))
 			attack->weaponFlags |= PROJECTILE_TIMED;
 
+		#ifndef _DEMO
 		trap_GPG_FindPairValue(sub, "mp_bounce||bounce", "0", tmpStr );
 		attack->bounceScale = atof ( tmpStr );
+		#else
+		// In demo, this cannot be set. It is always fixed at 0.45f.
+		attack->bounceScale = 0.45f;
+		#endif // not _DEMO
 
 		switch ( weaponNum )
 		{
