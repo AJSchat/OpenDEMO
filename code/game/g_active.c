@@ -1328,25 +1328,19 @@ void SpectatorClientEndFrame( gentity_t *ent )
 			{
 				int count;
 				int ping;
-				#ifndef _DEMO
 				int respawnTimer;
-				#endif // not _DEMO
 
 				count = ent->client->ps.persistant[PERS_SPAWN_COUNT];
 				ping  = ent->client->ps.ping;
 				flags = (cl->ps.eFlags & ~(EF_VOTED)) | (ent->client->ps.eFlags & (EF_VOTED));
-				#ifndef _DEMO
 				respawnTimer = ent->client->ps.respawnTimer;
-				#endif // not _DEMO
 
 				ent->client->ps = cl->ps;
 				ent->client->ps.pm_flags |= PMF_FOLLOW;
 				ent->client->ps.eFlags = flags;
 				ent->client->ps.persistant[PERS_SPAWN_COUNT] = count;
 				ent->client->ps.ping = ping;
-				#ifndef _DEMO
 				ent->client->ps.respawnTimer = respawnTimer;
-				#endif // not _DEMO
 
 				return;
 			} 

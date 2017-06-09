@@ -1504,11 +1504,7 @@ typedef struct playerState_s
 
 	// Timers 
 	int			grenadeTimer;
-	#ifndef _DEMO
-	// Possibly not in demo, at least no refs anywhere.
-	// Would make sense, since it is only used in CTF which is *not* present in demo.
 	int			respawnTimer;
-	#endif // not _DEMO
 } playerState_t;
 
 
