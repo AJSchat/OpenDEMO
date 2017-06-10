@@ -995,8 +995,12 @@ void FindIntermissionPoint( void )
 	// find the intermission spot
 	ent = G_Find (NULL, FOFS(classname), "info_player_intermission");
 	if ( !ent ) 		
-	{	
+	{
+		#ifndef _DEMO
 		gspawn_t* spawn = G_SelectRandomSpawnPoint ( -1 );
+		#else
+		gspawn_t* spawn = G_SelectRandomSpawnPoint(-1, qfalse);
+		#endif // not _DEMO
 		if ( spawn )
 		{
 			VectorCopy (spawn->origin, level.intermission_origin);

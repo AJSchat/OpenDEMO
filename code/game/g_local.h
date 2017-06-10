@@ -166,6 +166,9 @@ typedef struct gspawn_s
 	vec3_t		origin;
 	vec3_t		angles;
 
+	#ifdef _DEMO
+	int			flags;
+	#endif // not _DEMO
 } gspawn_t;
 
 typedef enum 
@@ -787,7 +790,11 @@ void		ClientUserinfoChanged				( int clientNum );
 void		ClientDisconnect					( int clientNum );
 void		ClientBegin							( int clientNum );
 void		ClientCommand						( int clientNum );
+#ifndef _DEMO
 gspawn_t*	G_SelectRandomSpawnPoint			( team_t team );
+#else
+gspawn_t*	G_SelectRandomSpawnPoint			( team_t team, qboolean isBot );
+#endif // not _DEMO
 int			G_GametypeCommand					( int cmd, int arg0, int arg1, int arg2, int arg3, int arg4 );
 
 //

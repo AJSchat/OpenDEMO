@@ -53,6 +53,9 @@ void G_AddClientSpawn ( gentity_t* ent, team_t team )
 	}
 
 	level.spawns[level.spawnCount].team = team;
+	#ifdef _DEMO
+	level.spawns[level.spawnCount].flags = ent->flags;
+	#endif // _DEMO
 
 	// Release the entity and store the spawn in its own array
 	VectorCopy ( ent->s.origin, level.spawns[level.spawnCount].origin );
@@ -69,12 +72,27 @@ Targets will be fired when someone spawns in on them.
 */
 void SP_info_player_deathmatch( gentity_t *ent ) 
 {
+	#ifdef _DEMO
+	int	i;
+	#endif // _DEMO
+
 	// Cant take any more spawns!!
 	if ( level.spawnCount >= MAX_SPAWNS )
 	{
 		G_FreeEntity ( ent );
 		return;
 	}
+
+	#ifdef _DEMO
+	G_SpawnInt("nobots", "0", &i);
+	if (i) {
+		ent->flags |= FL_NO_BOTS;
+	}
+	G_SpawnInt("nohumans", "0", &i);
+	if (i) {
+		ent->flags |= FL_NO_HUMANS;
+	}
+	#endif // _DEMO
 
 	G_AddClientSpawn ( ent, TEAM_FREE );
 
@@ -134,7 +152,11 @@ G_SelectRandomSpawnPoint
 go to a random point that doesn't telefrag
 ================
 */
-gspawn_t* G_SelectRandomSpawnPoint ( team_t team ) 
+#ifndef _DEMO
+gspawn_t* G_SelectRandomSpawnPoint(team_t team)
+#else
+gspawn_t* G_SelectRandomSpawnPoint(team_t team, qboolean isBot)
+#endif // not _DEMO
 {	
 	int			i;
 	int			count;
@@ -153,6 +175,19 @@ gspawn_t* G_SelectRandomSpawnPoint ( team_t team )
 		{
 			continue;
 		}
+
+		#ifdef _DEMO
+		// Check if only bots or humans are supposed to spawn at this spawnpoint.
+		if (isBot && spawn->flags & FL_NO_BOTS)
+		{
+			continue;
+		}
+
+		if (!isBot && spawn->flags & FL_NO_HUMANS)
+		{
+			continue;
+		}
+		#endif // _DEMO
 
 		if ( G_SpotWouldTelefrag( spawn ) ) 
 		{
@@ -187,7 +222,11 @@ Select a random spawn point that is safe for the client to spawn at.  A safe spa
 is one that is at least a certain distance from another client.
 ============
 */
-gspawn_t* G_SelectRandomSafeSpawnPoint ( team_t team, float safeDistance )
+#ifndef _DEMO
+gspawn_t* G_SelectRandomSafeSpawnPoint(team_t team, float safeDistance)
+#else
+gspawn_t* G_SelectRandomSafeSpawnPoint(team_t team, float safeDistance, qboolean isBot)
+#endif // not _DEMO
 {
 	gspawn_t*	spawns[MAX_SPAWNS];
 	float		safeDistanceSquared;
@@ -214,6 +253,19 @@ gspawn_t* G_SelectRandomSafeSpawnPoint ( team_t team, float safeDistance )
 		{
 			continue;
 		}
+
+		#ifdef _DEMO
+		// Check if only bots or humans are supposed to spawn at this spawnpoint.
+		if(isBot && spawn->flags & FL_NO_BOTS)
+		{
+			continue;
+		}
+
+		if(!isBot && spawn->flags & FL_NO_HUMANS)
+		{
+			continue;
+		}
+		#endif // _DEMO
 
 		// Loop through connected clients 
 		for ( j = 0; j < level.numConnectedClients && count < MAX_SPAWNS; j ++ )
@@ -259,15 +311,27 @@ gspawn_t* G_SelectRandomSafeSpawnPoint ( team_t team, float safeDistance )
 	// Nothing found, try it at half the safe distance
 	if ( !count )
 	{
+		#ifndef _DEMO
 		// Gotta stop somewhere
-		if ( safeDistance / 2 < 250 )
+		if (safeDistance / 2 < 250)
 		{
-			return G_SelectRandomSpawnPoint ( team );
+			return G_SelectRandomSpawnPoint(team);
 		}
 		else
 		{
-			return G_SelectRandomSafeSpawnPoint ( team, safeDistance / 2 );
+			return G_SelectRandomSafeSpawnPoint(team, safeDistance / 2);
 		}
+		#else
+		// Gotta stop somewhere
+		if (safeDistance / 2 < 250)
+		{
+			return G_SelectRandomSpawnPoint(team, isBot);
+		}
+		else
+		{
+			return G_SelectRandomSafeSpawnPoint(team, safeDistance / 2, isBot);
+		}
+		#endif // not _DEMO
 	}
 
 	// Spawn them at one of the spots
@@ -1365,72 +1429,144 @@ G_SelectClientSpawnPoint
 Selects a spawn point for the given client entity
 ============
 */
-gspawn_t* G_SelectClientSpawnPoint ( gentity_t* ent )
+#ifndef _DEMO
+gspawn_t* G_SelectClientSpawnPoint(gentity_t* ent)
 {
 	gclient_t*	client = ent->client;
 	gspawn_t*	spawnPoint;
 
-		// find a spawn point
+	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
-	if ( client->sess.team == TEAM_SPECTATOR ) 
+	if (client->sess.team == TEAM_SPECTATOR)
 	{
-		spawnPoint = G_SelectSpectatorSpawnPoint ( );
+		spawnPoint = G_SelectSpectatorSpawnPoint();
 	}
-	else 
+	else
 	{
-		if ( level.gametypeData->teams && level.gametypeData->respawnType != RT_NORMAL )
+		if (level.gametypeData->teams && level.gametypeData->respawnType != RT_NORMAL)
 		{
 			// Dont bother selecting a safe spawn on non-respawn games, the map creator should
 			// have done this for us.
-			if ( level.gametypeData->respawnType == RT_NONE )
+			if (level.gametypeData->respawnType == RT_NONE)
 			{
-				spawnPoint = G_SelectRandomSpawnPoint ( ent->client->sess.team );
+				spawnPoint = G_SelectRandomSpawnPoint(ent->client->sess.team);
 			}
 			else
 			{
-				spawnPoint = G_SelectRandomSafeSpawnPoint ( ent->client->sess.team, 1500 );
+				spawnPoint = G_SelectRandomSafeSpawnPoint(ent->client->sess.team, 1500);
 			}
 
-			if ( !spawnPoint )
+			if (!spawnPoint)
 			{
 				// don't spawn near other players if possible
-				spawnPoint = G_SelectRandomSpawnPoint ( ent->client->sess.team );
+				spawnPoint = G_SelectRandomSpawnPoint(ent->client->sess.team);
 			}
 
 			// Spawn at any deathmatch spawn, telefrag if needed
-			if ( !spawnPoint )
+			if (!spawnPoint)
 			{
-				spawnPoint = G_SelectRandomSpawnPoint ( TEAM_FREE );
+				spawnPoint = G_SelectRandomSpawnPoint(TEAM_FREE);
 			}
 		}
 		else
 		{
 			// Try deathmatch spawns first
-			spawnPoint = G_SelectRandomSafeSpawnPoint ( TEAM_FREE, 1500 );
+			spawnPoint = G_SelectRandomSafeSpawnPoint(TEAM_FREE, 1500);
 
 			// If none found use any spawn
-			if ( !spawnPoint )
+			if (!spawnPoint)
 			{
-				spawnPoint = G_SelectRandomSafeSpawnPoint ( -1, 1500 );
+				spawnPoint = G_SelectRandomSafeSpawnPoint(-1, 1500);
 			}
 
 			// Spawn at any deathmatch spawn, telefrag if needed
-			if ( !spawnPoint )
+			if (!spawnPoint)
 			{
-				spawnPoint = G_SelectRandomSpawnPoint ( TEAM_FREE );
+				spawnPoint = G_SelectRandomSpawnPoint(TEAM_FREE);
 			}
 
 			// Spawn at any gametype spawn, telefrag if needed
-			if ( !spawnPoint )
+			if (!spawnPoint)
 			{
-				spawnPoint = G_SelectRandomSpawnPoint ( -1 );
+				spawnPoint = G_SelectRandomSpawnPoint(-1);
 			}
-		}		
+		}
 	}
 
 	return spawnPoint;
 }
+#else
+gspawn_t* G_SelectClientSpawnPoint(gentity_t* ent)
+{
+	gclient_t*	client = ent->client;
+	gspawn_t*	spawnPoint;
+	qboolean	isBot;
+
+	isBot = ent->r.svFlags & SVF_BOT;
+
+	// find a spawn point
+	// do it before setting health back up, so farthest
+	// ranging doesn't count this client
+	if (client->sess.team == TEAM_SPECTATOR)
+	{
+		spawnPoint = G_SelectSpectatorSpawnPoint();
+	}
+	else
+	{
+		if (level.gametypeData->teams && level.gametypeData->respawnType != RT_NORMAL)
+		{
+			// Dont bother selecting a safe spawn on non-respawn games, the map creator should
+			// have done this for us.
+			if (level.gametypeData->respawnType == RT_NONE)
+			{
+				spawnPoint = G_SelectRandomSpawnPoint(ent->client->sess.team, isBot);
+			}
+			else
+			{
+				spawnPoint = G_SelectRandomSafeSpawnPoint(ent->client->sess.team, 1500, isBot);
+			}
+
+			if (!spawnPoint)
+			{
+				// don't spawn near other players if possible
+				spawnPoint = G_SelectRandomSpawnPoint(ent->client->sess.team, isBot);
+			}
+
+			// Spawn at any deathmatch spawn, telefrag if needed
+			if (!spawnPoint)
+			{
+				spawnPoint = G_SelectRandomSpawnPoint(TEAM_FREE, isBot);
+			}
+		}
+		else
+		{
+			// Try deathmatch spawns first
+			spawnPoint = G_SelectRandomSafeSpawnPoint(TEAM_FREE, 1500, isBot);
+
+			// If none found use any spawn
+			if (!spawnPoint)
+			{
+				spawnPoint = G_SelectRandomSafeSpawnPoint(-1, 1500, isBot);
+			}
+
+			// Spawn at any deathmatch spawn, telefrag if needed
+			if (!spawnPoint)
+			{
+				spawnPoint = G_SelectRandomSpawnPoint(TEAM_FREE, isBot);
+			}
+
+			// Spawn at any gametype spawn, telefrag if needed
+			if (!spawnPoint)
+			{
+				spawnPoint = G_SelectRandomSpawnPoint(-1, isBot);
+			}
+		}
+	}
+
+	return spawnPoint;
+}
+#endif // not _DEMO
 
 /*
 ===========
