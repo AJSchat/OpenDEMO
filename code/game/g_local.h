@@ -924,6 +924,9 @@ extern  vmCvar_t	g_debugRMG;
 extern	vmCvar_t	g_timeouttospec;
 extern  vmCvar_t	g_roundtimelimit;
 extern  vmCvar_t	g_timeextension;
+#ifdef _DEMO
+extern	vmCvar_t	g_timeextensionmultiplier;
+#endif // _DEMO
 extern  vmCvar_t	g_roundstartdelay;
 extern  vmCvar_t	g_availableWeapons;
 extern	vmCvar_t	g_forceFollow;

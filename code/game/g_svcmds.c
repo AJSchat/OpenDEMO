@@ -337,7 +337,7 @@ void	Svcmd_EntityList_f (void) {
 	}
 }
 
-
+#ifndef _DEMO
 void Svcmd_ExtendTime_f (void) 
 {
 	char str[MAX_TOKEN_CHARS];
@@ -352,15 +352,13 @@ void Svcmd_ExtendTime_f (void)
 	trap_Argv( 1, str, sizeof( str ) );
 
 	time = atoi(str);
-	#ifndef _DEMO
-	// FIXME DEMO
 	level.timeExtension += time;
-	#endif // not _DEMO
 
 	G_LogPrintf ( "timelimit extended by %d minutes\n", time );
 
 	trap_SendServerCommand( -1, va("print \"timelimit extended by %d minutes\n\"", time) );
 }
+#endif // not _DEMO
 
 gclient_t	*ClientForString( const char *s ) {
 	gclient_t	*cl;
@@ -509,11 +507,13 @@ qboolean ConsoleCommand( void )
 		return qtrue;
 	}
 
+	#ifndef _DEMO
 	if (Q_stricmp (cmd, "extendtime" ) == 0 )
 	{
 		Svcmd_ExtendTime_f();
 		return qtrue;
 	}
+	#endif // not _DEMO
 
 	if (g_dedicated.integer) 
 	{

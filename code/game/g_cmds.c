@@ -1667,11 +1667,20 @@ void Cmd_CallVote_f( gentity_t *ent )
 	} else if ( !Q_stricmp( arg1, "g_doWarmup" ) ) {
 	} else if ( !Q_stricmp( arg1, "timelimit" ) ) {
 	} else if ( !Q_stricmp( arg1, "timeextension" ) ) {
+	#ifndef _DEMO
 	} else if ( !Q_stricmp( arg1, "scorelimit" ) ) {
+	#else
+	} else if ( !Q_stricmp( arg1, "fraglimit" ) ) {
+	#endif // not _DEMO
 	} else 
 	{
 		trap_SendServerCommand( ent-g_entities, "print \"Invalid vote string.\n\"" );
-		trap_SendServerCommand( ent-g_entities, "print \"Vote commands are: map_restart, nextmap, map <mapname>, g_gametype <n>, kick <player>, clientkick <clientnum>, g_doWarmup, timelimit <time>, scorelimit <score>.\n\"" );
+		#ifndef _DEMO
+		trap_SendServerCommand(ent-g_entities, "print \"Vote commands are: map_restart, nextmap, map <mapname>, g_gametype <n>, kick <player>, clientkick <clientnum>, g_doWarmup, timelimit <time>, scorelimit <score>.\n\"");
+		#else
+		trap_SendServerCommand(ent-g_entities, "print \"Vote commands are : map_restart, nextmap, map <mapname>, g_gametype <n>, kick <player>, clientkick <clientnum>, g_doWarmup, timelimit <time>, fraglimit <frags>.\n\"");
+		#endif // not _DEMO
+
 		return;
 	}
 
@@ -1762,6 +1771,7 @@ void Cmd_CallVote_f( gentity_t *ent )
 		Com_sprintf ( level.voteString, sizeof(level.voteString ), "clientkick %d", clientid );
 		Com_sprintf ( level.voteDisplayString, sizeof(level.voteDisplayString), "kick %s", g_entities[clientid].client->pers.netname );
 	}
+	#ifndef _DEMO
 	else if ( !Q_stricmp ( arg1, "timeextension" ) )
 	{
 		if ( !g_timelimit.integer )
@@ -1778,6 +1788,7 @@ void Cmd_CallVote_f( gentity_t *ent )
 		Com_sprintf ( level.voteString, sizeof(level.voteString ), "extendtime %d", g_timeextension.integer );
 		Com_sprintf ( level.voteDisplayString, sizeof(level.voteDisplayString), "extend timelimit by %d minutes", g_timeextension.integer );
 	}
+	#endif // not _DEMO
 	else 
 	{
 		Com_sprintf( level.voteString, sizeof( level.voteString ), "%s \"%s\"", arg1, arg2 );

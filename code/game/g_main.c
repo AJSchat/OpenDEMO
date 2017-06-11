@@ -67,6 +67,9 @@ vmCvar_t	g_respawnInterval;
 vmCvar_t	g_respawnInvulnerability;
 vmCvar_t	g_roundtimelimit;
 vmCvar_t	g_timeextension;
+#ifdef _DEMO
+vmCvar_t	g_timeextensionmultiplier;
+#endif // _DEMO
 vmCvar_t	g_timeouttospec;
 vmCvar_t	g_roundstartdelay;
 vmCvar_t	g_availableWeapons;
@@ -106,7 +109,11 @@ static cvarTable_t gameCvarTable[] =
 	{ &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse  },
 
 	{ &g_dmflags, "dmflags", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0.0, 0.0, 0, qtrue  },
+	#ifndef _DEMO
 	{ &g_scorelimit, "scorelimit", "20", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0.0, 0.0, 0, qtrue },
+	#else
+	{ &g_scorelimit, "fraglimit", "20", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0.0, 0.0, 0, qtrue },
+	#endif // not _DEMO
 	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0.0, 0.0, 0, qtrue },
 
 	{ &g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO, 0.0, 0.0, 0, qfalse  },
@@ -163,6 +170,9 @@ static cvarTable_t gameCvarTable[] =
 	{ &g_timeouttospec,		"g_timeouttospec",	"15",		CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse },
 	{ &g_roundtimelimit,	"g_roundtimelimit",	"5",		CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse },
 	{ &g_timeextension,		"g_timeextension",	"15",		CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse },
+	#ifdef _DEMO
+	{ &g_timeextensionmultiplier,		"g_timeextensionmultiplier",	"0", 0, 0.0, 0.0, 0, qfalse },
+	#endif // _DEMO
 
 	{ &g_roundstartdelay,	"g_roundstartdelay", "5",		CVAR_ARCHIVE, 0.0, 0.0, 0, qfalse },
 
@@ -647,6 +657,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart )
 		trap_Cvar_VariableStringBuffer("RMG_music", temp, MAX_QPATH);
 		trap_SetConfigstring( CS_MUSIC, temp );
 	}
+
+	#ifdef _DEMO
+	trap_Cvar_Set("g_timeextensionmultiplier", "0");
+	#endif // _DEMO
 
 	trap_SetConfigstring( CS_VOTE_TIME, "" );
 }
@@ -1376,10 +1390,11 @@ void CheckExitRules( void )
 	if ( g_timelimit.integer && !level.warmupTime ) 
 	{
 		#ifndef _DEMO
-		// FIXME DEMO
-		if ( level.time - level.startTime >= (g_timelimit.integer + level.timeExtension)*60000 ) 
-		{
+		if (level.time - level.startTime >= (g_timelimit.integer + level.timeExtension)*60000)
+		#else
+		if (level.time - level.startTime >= (g_timelimit.integer + g_timeextension.integer * g_timeextensionmultiplier.integer) * 60000)
 		#endif // not _DEMO
+		{
 			gentity_t* tent;
 			tent = G_TempEntity( vec3_origin, EV_GAME_OVER );
 			tent->s.eventParm = GAME_OVER_TIMELIMIT;
@@ -1387,9 +1402,7 @@ void CheckExitRules( void )
 
 			LogExit( "Timelimit hit." );
 			return;
-		#ifndef _DEMO
 		}
-		#endif // not _DEMO
 	}
 
 	// Check to see if the score was hit
@@ -1405,7 +1418,11 @@ void CheckExitRules( void )
 				tent->r.svFlags = SVF_BROADCAST;	
 				tent->s.otherEntityNum = TEAM_RED;
 
-				LogExit( "Red team hit the score limit." );
+				#ifndef _DEMO
+				LogExit("Red team hit the score limit.");
+				#else
+				LogExit("Red Team hit the Team Score Limit.");
+				#endif // not _DEMO
 				return;
 			}
 
@@ -1417,7 +1434,11 @@ void CheckExitRules( void )
 				tent->r.svFlags = SVF_BROADCAST;	
 				tent->s.otherEntityNum = TEAM_BLUE;
 
-				LogExit( "Blue team hit the score limit." );
+				#ifndef _DEMO
+				LogExit("Blue team hit the score limit.");
+				#else
+				LogExit("Blue Team hit the Team Score Limit.");
+				#endif // not _DEMO
 				return;
 			}
 		}
@@ -1446,7 +1467,11 @@ void CheckExitRules( void )
 					tent->r.svFlags = SVF_BROADCAST;	
 					tent->s.otherEntityNum = level.sortedClients[i];
 
+					#ifndef _DEMO
 					LogExit( "Scorelimit hit." );
+					#else
+					LogExit("Fraglimit hit.");
+					#endif // not _DEMO
 					return;
 				}
 			}
