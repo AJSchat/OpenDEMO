@@ -313,9 +313,18 @@ void G_FireBullet ( gentity_t* ent, int weapon, int attack )
 		vec3_t  right;
 		float	leanOffset;
 
+
 		leanOffset = (float)(ent->client->ps.leanTime - LEAN_TIME) / LEAN_TIME * LEAN_OFFSET;
+		#ifdef _DEMO
+		fireAngs[ROLL] += leanOffset / 4;
+		#endif // _DEMO
 		AngleVectors( fireAngs, NULL, right, NULL );
-		VectorMA( muzzlePoint, leanOffset, right, muzzlePoint );
+
+		#ifndef _DEMO
+		VectorMA(muzzlePoint, leanOffset, right, muzzlePoint);
+		#else
+		VectorMA(muzzlePoint, leanOffset * 0.75f, right, muzzlePoint);
+		#endif // not _DEMO
 	}
 
 	AngleVectors( fireAngs, fwd, NULL, NULL );
@@ -678,7 +687,11 @@ gentity_t* G_FireProjectile ( gentity_t *ent, weapon_t weapon, attackType_t atta
 		leanOffset = (float)(ent->client->ps.leanTime - LEAN_TIME) / LEAN_TIME * LEAN_OFFSET;
 		fireAngs[ROLL] += leanOffset / 4;
 		AngleVectors( fireAngs, NULL, right, NULL );
-		VectorMA( muzzlePoint, leanOffset /* * 0.75f */, right, muzzlePoint );
+		#ifndef _DEMO
+		VectorMA(muzzlePoint, leanOffset, right, muzzlePoint);
+		#else
+		VectorMA(muzzlePoint, leanOffset * 0.75f, right, muzzlePoint);
+		#endif // not _DEMO
 	}
 
 	AngleVectors( fireAngs, fwd, right, up );

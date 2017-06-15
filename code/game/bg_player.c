@@ -1134,7 +1134,9 @@ void BG_PlayerAngles (
 
 	vec3_t		legsAngles,				// out
 	vec3_t		lowerTorsoAngles,
+	#ifndef _DEMO
 	vec3_t		upperTorsoAngles,
+	#endif // not _DEMO
 	vec3_t		headAngles,
 
 	int			leanOffset,
@@ -1163,8 +1165,10 @@ void BG_PlayerAngles (
 	VectorCopy ( realvelocity, velocity );
 	headAngles[YAW] = AngleMod( headAngles[YAW] );
 	VectorClear( legsAngles );
-	VectorClear( lowerTorsoAngles );	
+	VectorClear( lowerTorsoAngles );
+	#ifndef _DEMO
 	VectorClear( upperTorsoAngles );
+	#endif // not _DEMO
 
 	// --------- yaw -------------
 
@@ -1203,6 +1207,7 @@ void BG_PlayerAngles (
 	BG_SwingAngles( lowerTorsoAngles[YAW], 25, 90, 0.3f, &torsoInfo->yawAngle, &torsoInfo->yawing, frameTime );
 	BG_SwingAngles( legsAngles[YAW],  40, 90, 0.3f, &legsInfo->yawAngle,  &legsInfo->yawing,  frameTime );
 
+	#ifndef _DEMO
 	if ( leanOffset )
 	{
 		legsAngles[YAW] = headAngles[YAW];
@@ -1217,6 +1222,7 @@ void BG_PlayerAngles (
 	lowerTorsoAngles[YAW]  = legsAngles[YAW] + lowerTorsoAngles[YAW] / 2;
 
 	headAngles[YAW] -= upperTorsoAngles[YAW];
+	#endif // not _DEMO
 
 
 	// --------- pitch -------------
@@ -1237,11 +1243,15 @@ void BG_PlayerAngles (
 	// Add in leanoffset
 	if ( leanOffset )
 	{
+		#ifdef _DEMO
+		legsAngles[ROLL] += ((float)leanOffset/LEAN_OFFSET * 4.0f);
+		#endif // _DEMO
 		lowerTorsoAngles[ROLL] -= ((float)leanOffset * 1.25f);
 		lowerTorsoAngles[YAW] -= 1.25f * ((float)leanOffset/LEAN_OFFSET) * dest;
 		headAngles[YAW] -= ((float)leanOffset/LEAN_OFFSET) * dest;
 		headAngles[ROLL] -= ((float)leanOffset * 1.25f);
 	}
+	#ifndef _DEMO
 	else if ( speed ) 
 	{
 		vec3_t	axis[3];
@@ -1253,6 +1263,7 @@ void BG_PlayerAngles (
 		side = speed * DotProduct( velocity, axis[1] );
 		legsAngles[ROLL] -= side;
 	}
+	#endif // not _DEMO
 
 	// pain twitch
 	BG_AddPainTwitch( painTime, painDirection, currentTime, lowerTorsoAngles );

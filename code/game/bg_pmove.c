@@ -1573,33 +1573,33 @@ static void PM_Footsteps( void )
 			
 			if ( pm->ps->pm_flags & PMF_DUCKED ) 
 			{
+				#ifndef _DEMO
 				if ( pm->ps->leanTime - LEAN_TIME < 0 )
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_LEFT );	 // FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEAN_CROUCH_LEFT);
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_CROUCH_RIGHT );	// FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEAN_CROUCH_RIGHT);
 				}
 				else
-				{
+				#endif // not _DEMO
 					PM_ContinueLegsAnim( pm->ps, LEGS_IDLE_CROUCH );
-				}
 			}		
 			else 
 			{
+				#ifndef _DEMO
 				if ( pm->ps->leanTime - LEAN_TIME < 0 )
 				{
-					// PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_LEFT );	// FIXME DEMO
+					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_LEFT );
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
-					// PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_RIGHT );	// FIXME DEMO
+					PM_ContinueLegsAnim( pm->ps, LEGS_LEAN_RIGHT );
 				}
 				else
-				{
+				#endif // not _DEMO
 					PM_ContinueLegsAnim( pm->ps, TORSO_IDLE_PISTOL );
-				}
 			}
 		}
 		return;
@@ -1618,34 +1618,34 @@ static void PM_Footsteps( void )
 		}
 		else 
 		{
+			#ifndef _DEMO
 			if ( pm->ps->leanTime - LEAN_TIME < 0 )
 			{
 				if ( pm->cmd.rightmove > 0 )
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKRIGHT );	// FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEANLEFT_CROUCH_WALKRIGHT);
 				}
 				else
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_CROUCH_WALKLEFT );	// FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEANLEFT_CROUCH_WALKLEFT);
 				}
 			}
 			else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 			{
 				if ( pm->cmd.rightmove > 0 )
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKRIGHT );	// FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEANRIGHT_CROUCH_WALKRIGHT);
 				}
 				else
 				{
-					//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_CROUCH_WALKLEFT );	// FIXME DEMO
+					PM_ContinueLegsAnim(pm->ps, LEGS_LEANRIGHT_CROUCH_WALKLEFT);
 				}
 			}
 			else
-			{
+			#endif // not _DEMO
 				PM_ContinueLegsAnim( pm->ps, LEGS_WALK_CROUCH );
-			}
 		}
-	} 
+	}
 	else 
 	{
 		if ( !( pm->cmd.buttons & BUTTON_WALKING ) )
@@ -1672,32 +1672,32 @@ static void PM_Footsteps( void )
 			}
 			else 
 			{
+				#ifndef _DEMO
 				if ( pm->ps->leanTime - LEAN_TIME < 0 )
 				{
 					if ( pm->cmd.rightmove > 0 )
 					{
-						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKRIGHT );	// FIXME DEMO
+						PM_ContinueLegsAnim(pm->ps, LEGS_LEANLEFT_WALKRIGHT);
 					}
 					else
 					{
-						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANLEFT_WALKLEFT );	// FIXME DEMO
+						PM_ContinueLegsAnim(pm->ps, LEGS_LEANLEFT_WALKLEFT);
 					}
 				}
 				else if ( pm->ps->leanTime - LEAN_TIME > 0 )
 				{
 					if ( pm->cmd.rightmove > 0 )
 					{
-						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKRIGHT );	// FIXME DEMO
+						PM_ContinueLegsAnim(pm->ps, LEGS_LEANRIGHT_WALKRIGHT);
 					}
 					else
 					{
-						//PM_ContinueLegsAnim( pm->ps, LEGS_LEANRIGHT_WALKLEFT );	// FIXME DEMO
+						PM_ContinueLegsAnim(pm->ps, LEGS_LEANRIGHT_WALKLEFT);
 					}
 				}
 				else
-				{
+				#endif // not _DEMO
 					PM_ContinueLegsAnim( pm->ps, LEGS_WALK );
-				}
 			}
 		}
 	}
@@ -3347,8 +3347,13 @@ PM_CheckLean
 static void PM_CheckLean( void )
 {
 	trace_t		trace;
-	qboolean	canlean;
 	float		leanTime;
+
+	#ifndef _DEMO
+	qboolean	canlean;
+
+	canlean = qfalse;
+	#endif // not _DEMO
 
 	if ( !pm || !pm->ps )
 	{		
@@ -3364,15 +3369,14 @@ static void PM_CheckLean( void )
 	}
 
 	leanTime = (float)pm->ps->leanTime - LEAN_TIME;
-	canlean  = qfalse;
 
 	// If their lean button is being pressed and they are on the ground then perform the lean
 	if( (pm->cmd.buttons & (BUTTON_LEAN_RIGHT|BUTTON_LEAN_LEFT)) && (pm->ps->groundEntityNum != ENTITYNUM_NONE) )
 	{
  		vec3_t	start, end, right, mins, maxs;
 		int		leanDir;
-		
-		if( pm->cmd.buttons & BUTTON_LEAN_RIGHT )
+
+		if (pm->cmd.buttons & BUTTON_LEAN_RIGHT)
 		{
 			leanDir = 1;
 		}
@@ -3385,17 +3389,26 @@ static void PM_CheckLean( void )
 		VectorCopy( pm->ps->origin, start );
 		start[2] += pm->ps->viewheight;
 		AngleVectors( pm->ps->viewangles, NULL, right, NULL );
-		VectorSet( mins, -6, -6, -8 ); 
-		VectorSet( maxs, 6, 6, 8 ); 
+		#ifndef _DEMO
+		VectorSet(mins, -6, -6, -8);
+		VectorSet(maxs, 6, 6, 8);
+
+		VectorMA(start, leanDir * LEAN_OFFSET * 1.25f, right, end);
+		#else
+		VectorSet(mins, -8, -8, -8);
+		VectorSet(maxs, 8, 8, 8);
 		
+		VectorMA(start, leanDir * LEAN_OFFSET, right, end);
+		#endif // not _DEMO
+
 		// since we're moving the camera over
 		// check that move
-		VectorMA( start, leanDir * LEAN_OFFSET * 1.25f, right, end );
 		pm->trace(&trace, start, mins, maxs, end, pm->ps->clientNum, pm->tracemask );
 
 		if ( trace.fraction < 0 || trace.fraction >= 1.0f )
 		{
 			leanTime += (leanDir * pml.msec);
+
 			if( leanTime > LEAN_TIME )
 			{
 				leanTime = LEAN_TIME;
@@ -3405,20 +3418,33 @@ static void PM_CheckLean( void )
 				leanTime = -LEAN_TIME;
 			}
 
+			#ifndef _DEMO
 			canlean = qtrue;
+			#endif // not _DEMO
 		}
-		else if ( (pm->ps->pm_flags&PMF_LEANING) && trace.fraction < 1.0f )
+		#ifndef _DEMO
+		else if ((pm->ps->pm_flags&PMF_LEANING) && trace.fraction < 1.0f)
+		#else
+		else if (trace.fraction < 1.0f)
+		#endif // not _DEMO
 		{
+			#ifndef _DEMO
 			int templeanTime = (float)leanDir * (float)LEAN_TIME * trace.fraction;
 
 			if ( fabs(templeanTime) < fabs(leanTime) )
 			{
 				leanTime = templeanTime;
 			}
+			#else
+			leanTime = leanDir * (float)LEAN_TIME * trace.fraction;
+			#endif // not _DEMO
 		}
 	}
-
+	#ifdef _DEMO
+	else if (leanTime != 0)
+	#else
 	if ( !canlean )
+	#endif // _DEMO
 	{
 		if( leanTime > 0 )
 		{
@@ -3436,7 +3462,7 @@ static void PM_CheckLean( void )
 				leanTime = 0;
 			}
 		}
-	}	
+	}
 
 	// Set a pm flag for leaning for convienience
 	if ( leanTime != 0 )
@@ -3596,6 +3622,7 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->cmd.rightmove = 0;
 	}
 
+	#ifndef _DEMO
 	// Cant move when leaning
 	if ( (pm->cmd.buttons & (BUTTON_LEAN_LEFT|BUTTON_LEAN_RIGHT)))
 	{
@@ -3608,6 +3635,7 @@ void PmoveSingle (pmove_t *pmove) {
 			pm->cmd.upmove = 0;
 		}
 	}
+	#endif // not _DEMO
 	
 	// Cant run when zoomed
 	#ifndef _DEMO
@@ -3834,6 +3862,7 @@ void PmoveSingle (pmove_t *pmove) {
 	trap_SnapVector( pm->ps->velocity );
 }
 
+#ifndef _DEMO
 /*
 ================
 PM_UpdatePVSOrigin
@@ -3846,10 +3875,6 @@ change what you can see.
 */
 void PM_UpdatePVSOrigin ( pmove_t *pmove )
 {
-	#ifdef _DEMO
-	// FIXME DEMO
-	return;
-	#else
 	pm = pmove;
 
 	// Set a pm flag for leaning and calculate the view origin for the lean
@@ -3867,8 +3892,8 @@ void PM_UpdatePVSOrigin ( pmove_t *pmove )
 	{
 		VectorCopy ( pm->ps->origin, pm->ps->pvsOrigin );
 	}
-	#endif // _DEMO
 }
+#endif // not _DEMO
 
 /*
 ================
@@ -3912,7 +3937,9 @@ void Pmove (pmove_t *pmove) {
 		pmove->cmd.serverTime = pmove->ps->commandTime + msec;
 		PmoveSingle( pmove );
 
+		#ifndef _DEMO
 		PM_UpdatePVSOrigin ( pmove );	
+		#endif // not _DEMO
 
 		if ( pmove->ps->pm_debounce & PMD_JUMP ) 
 		{

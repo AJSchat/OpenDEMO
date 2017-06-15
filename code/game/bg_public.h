@@ -78,7 +78,7 @@
 #define BODY_SINK_TIME		1500
 
 #define LEAN_TIME			250			// boe temp - confirm OK
-#define LEAN_OFFSET			30			// boe temp - assume OK
+#define LEAN_OFFSET			30			// boe temp - confirm OK
 
 //
 // config strings are a general means of communicating variable length strings
@@ -531,7 +531,9 @@ extern	pmove_t		*pm;
 
 
 // if a full pmove isn't done on the client, you can just update the angles
+#ifndef _DEMO
 void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd );
+#endif // not _DEMO
 void Pmove (pmove_t *pmove);
 
 //===================================================================================
@@ -869,10 +871,14 @@ void		BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSt
 void		BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void		BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );
 void		BG_PlayerAngles( vec3_t startAngles, vec3_t legs[3], 
-						 vec3_t legsAngles, vec3_t lowerTorsoAngles, vec3_t upperTorsoAngles, vec3_t headAngles,
-						 int leanOffset, int painTime, int painDirection, int currentTime,
-					     animInfo_t* torsoInfo, animInfo_t* legsInfo,
-					     int frameTime, vec3_t velocity, qboolean dead, float movementDir, void *ghoul2 );
+						#ifndef _DEMO
+						vec3_t legsAngles, vec3_t lowerTorsoAngles, vec3_t upperTorsoAngles, vec3_t headAngles,
+						#else
+						vec3_t legsAngles, vec3_t lowerTorsoAngles, vec3_t headAngles,
+						#endif // not _DEMO
+						int leanOffset, int painTime, int painDirection, int currentTime,
+					    animInfo_t* torsoInfo, animInfo_t* legsInfo,
+					    int frameTime, vec3_t velocity, qboolean dead, float movementDir, void *ghoul2 );
 qboolean	BG_ParseAnimationFile ( const char *filename, animation_t* animations );
 
 float		BG_CalculateLeanOffset ( int leanTime );

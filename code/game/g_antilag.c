@@ -62,7 +62,9 @@ void G_UpdateClientAntiLag ( gentity_t* ent )
 
 	VectorCopy ( ent->client->ghoulLegsAngles, ent->client->antilag[head].legsAngles );
 	VectorCopy ( ent->client->ghoulLowerTorsoAngles, ent->client->antilag[head].lowerTorsoAngles );
+	#ifndef _DEMO
 	VectorCopy ( ent->client->ghoulUpperTorsoAngles, ent->client->antilag[head].upperTorsoAngles );
+	#endif // not _DEMO
 	VectorCopy ( ent->client->ghoulHeadAngles, ent->client->antilag[head].headAngles );
 
 	ent->client->antilag[head].legsAnim  = ent->s.legsAnim;
@@ -91,7 +93,9 @@ void G_UndoClientAntiLag ( gentity_t* ent )
 
 	VectorCopy ( ent->client->antilagUndo.legsAngles, ent->client->ghoulLegsAngles );
 	VectorCopy ( ent->client->antilagUndo.lowerTorsoAngles, ent->client->ghoulLowerTorsoAngles );
+	#ifndef _DEMO
 	VectorCopy ( ent->client->antilagUndo.upperTorsoAngles, ent->client->ghoulUpperTorsoAngles );
+	#endif // not _DEMO
 	VectorCopy ( ent->client->antilagUndo.headAngles, ent->client->ghoulHeadAngles );
 
 	ent->s.legsAnim = ent->client->antilagUndo.legsAnim;
@@ -155,7 +159,9 @@ void G_ApplyClientAntiLag ( gentity_t* ent, int time )
 
 		VectorCopy ( ent->client->ghoulLegsAngles, ent->client->antilagUndo.legsAngles );
 		VectorCopy ( ent->client->ghoulLowerTorsoAngles, ent->client->antilagUndo.lowerTorsoAngles );
+		#ifndef _DEMO
 		VectorCopy ( ent->client->ghoulUpperTorsoAngles, ent->client->antilagUndo.upperTorsoAngles );
+		#endif // not _DEMO
 		VectorCopy ( ent->client->ghoulHeadAngles, ent->client->antilagUndo.headAngles );
 
 		ent->client->antilagUndo.legsAnim  = ent->s.legsAnim;
@@ -175,7 +181,9 @@ void G_ApplyClientAntiLag ( gentity_t* ent, int time )
 
 		VectorCopy ( ent->client->antilag[to].legsAngles, ent->client->ghoulLegsAngles );
 		VectorCopy ( ent->client->antilag[to].lowerTorsoAngles, ent->client->ghoulLowerTorsoAngles );
+		#ifndef _DEMO
 		VectorCopy ( ent->client->antilag[to].upperTorsoAngles, ent->client->ghoulUpperTorsoAngles );
+		#endif // not _DEMO
 		VectorCopy ( ent->client->antilag[to].headAngles, ent->client->ghoulHeadAngles );
 
 		ent->s.legsAnim  = ent->client->antilag[to].legsAnim;
@@ -196,7 +204,9 @@ void G_ApplyClientAntiLag ( gentity_t* ent, int time )
 
 		LerpVector ( ent->client->antilag[from].legsAngles, ent->client->antilag[to].legsAngles, lerp, ent->client->ghoulLegsAngles );
 		LerpVector ( ent->client->antilag[from].lowerTorsoAngles, ent->client->antilag[to].lowerTorsoAngles, lerp, ent->client->ghoulLowerTorsoAngles );
+		#ifndef _DEMO
 		LerpVector ( ent->client->antilag[from].upperTorsoAngles, ent->client->antilag[to].upperTorsoAngles, lerp, ent->client->ghoulUpperTorsoAngles );
+		#endif // not _DEMO
 		LerpVector ( ent->client->antilag[from].headAngles, ent->client->antilag[to].headAngles, lerp, ent->client->ghoulHeadAngles );
 
 		ent->client->ps.leanTime = ent->client->antilag[from].leanTime + (ent->client->antilag[from].leanTime-ent->client->antilag[to].leanTime) * lerp;

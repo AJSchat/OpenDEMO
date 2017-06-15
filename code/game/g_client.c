@@ -1949,30 +1949,32 @@ void G_UpdateClientAnimations ( gentity_t* ent )
 	client->legs.yawing    = qtrue;
 
 	// Calculate the real torso and leg angles
-	BG_PlayerAngles ( ent->client->ps.viewangles, 
-					  NULL, 
-					  
-					  ent->client->ghoulLegsAngles,
-					  ent->client->ghoulLowerTorsoAngles,
-					  ent->client->ghoulUpperTorsoAngles,
-					  ent->client->ghoulHeadAngles,
+	BG_PlayerAngles (	ent->client->ps.viewangles,
+						NULL,
 
-					  (float)(ent->client->ps.leanTime - LEAN_TIME) / LEAN_TIME * LEAN_OFFSET,
-					 
-					  0, 
-					  0, 
-					  level.time,
-					 
-					  &client->torso,
-					  &client->legs,
-					 
-					  level.time - level.previousTime, 
-					 
-					  client->ps.velocity,
+						ent->client->ghoulLegsAngles,
+						ent->client->ghoulLowerTorsoAngles,
+						#ifndef _DEMO
+						ent->client->ghoulUpperTorsoAngles,
+						#endif // not _DEMO
+						ent->client->ghoulHeadAngles,
 
-					  qfalse, 
-					  ent->s.angles2[YAW],
-					  NULL );
+						(float)(ent->client->ps.leanTime - LEAN_TIME) / LEAN_TIME * LEAN_OFFSET,
+
+						0,
+						0,
+						level.time,
+
+						&client->torso,
+						&client->legs,
+
+						level.time - level.previousTime,
+
+						client->ps.velocity,
+
+						qfalse,
+						ent->s.angles2[YAW],
+						NULL);
 }
 
 /*

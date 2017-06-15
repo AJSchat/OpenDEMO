@@ -289,7 +289,9 @@ typedef struct gantilag_s
 
 	vec3_t	legsAngles;				// entity.client.ghoulLegsAngles
 	vec3_t	lowerTorsoAngles;		// entity.client.ghoulLowerTorsoAngles
+	#ifndef _DEMO
 	vec3_t	upperTorsoAngles;		// entity.client.ghoulUpperTorsoAngles
+	#endif // not _DEMO
 	vec3_t	headAngles;				// entity.client.ghoulHeadAngles
 
 	int		time;					// time history item was saved
@@ -377,7 +379,9 @@ struct gclient_s
 	animInfo_t		legs;
 	vec3_t			ghoulLegsAngles;
 	vec3_t			ghoulLowerTorsoAngles;
+	#ifndef _DEMO
 	vec3_t			ghoulUpperTorsoAngles;
+	#endif // not _DEMO
 	vec3_t			ghoulHeadAngles;
 
 	#ifndef _DEMO
