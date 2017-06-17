@@ -187,11 +187,13 @@ static void PM_Friction( void )
 	{
 		drop += speed*pm_waterfriction*pm->waterlevel*pml.frametime;
 	}
+	#ifndef _DEMO
 	// If on someones head then use special friction
 	else if ( pm->ps->groundEntityNum < MAX_CLIENTS )
 	{
 		drop = speed*pm_headfriction*pml.frametime;
 	}
+	#endif // not _DEMO
 
 	if ( pm->ps->pm_type == PM_SPECTATOR) 
 	{
@@ -367,10 +369,12 @@ PM_CheckJump
 */
 static qboolean PM_CheckJump( void ) 
 {
+	#ifndef _DEMO
 	if ( pm->ps->pm_time )
 	{
 		return qfalse;
 	}
+	#endif // not _DEMO
 
 	// Cant jump when ducked
 	if ( pm->ps->pm_flags & PMF_DUCKED ) 
@@ -1100,13 +1104,19 @@ static void PM_CrashLand( int impactMaterial, vec3_t impactNormal )
 	{
 		return;
 	}
-	else if ( jumped && delta >= minDeltaForSlowDown )
+	#ifndef _DEMO
+	else if(jumped && delta >= minDeltaForSlowDown)
+	#else
+	else if(jumped)
+	#endif // not _DEMO
 	{
 		// Cut their forward velocity, this pretty much eliminates strafe jumping
  		pm->ps->velocity[0] *= 0.25f;
 		pm->ps->velocity[1] *= 0.25f;
 
+		#ifndef _DEMO
 		pm->ps->pm_time = 500;
+		#endif // not _DEMO
 	}
 
 	// create a local entity event to play the sound
