@@ -3446,7 +3446,16 @@ static void PM_CheckLean( void )
 				leanTime = templeanTime;
 			}
 			#else
-			leanTime = leanDir * (float)LEAN_TIME * trace.fraction;
+			int origLeanTime = leanTime + (leanDir * pml.msec);
+			int newLeanTime = (float)leanDir * (float)LEAN_TIME * trace.fraction;
+
+			if((leanDir < 0 && origLeanTime > newLeanTime)
+				|| (leanDir > 0 && origLeanTime < newLeanTime))
+			{
+				leanTime = origLeanTime;
+			}else{
+				leanTime = newLeanTime;
+			}
 			#endif // not _DEMO
 		}
 	}
