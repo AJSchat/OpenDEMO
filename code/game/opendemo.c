@@ -23,10 +23,10 @@ void opendemo_showMotd(gentity_t *ent)
 		"Open^eDEMO^7 - built on " __DATE__ "\n" \
 		"Developed by ^GBoe!Man\n" \
 		"A SoF2MPSDK made compatible with MP TEST\n\n" \
-		"This server runs an experimental build.\n" \
-		"Lots of stuff is still in development,\n" \
-		"such as movement and hitreg.\n\n" \
-		"Please e-mail findings to ^Zboe@1fxmod.org",
+		"OpenDEMO is an effort to enable running\n" \
+		"real server/client mods on demo, built using\n" \
+		"the base of this OpenDEMO SDK.\n\n" \
+		"Please e-mail (gameplay) bugs to ^Zboe@1fxmod.org",
 		sizeof(motd));
 
 	trap_SendServerCommand(ent-g_entities, va("cp \"@%s\n\"", motd));

@@ -1328,7 +1328,11 @@ typedef enum {
 //
 #define	MAX_CLIENTS			64		// absolute limit
 #define MAX_LOCATIONS		64
-#define MAX_TERRAINS		96		// boe temp - NOT OK! FROM 32 to 96, OR(!) there's another config string in-between. BOE FIXME
+#ifndef _DEMO
+#define MAX_TERRAINS		32
+#else
+#define MAX_TERRAINS		96
+#endif // not _DEMO
 #define MAX_LADDERS			64
 
 #define MAX_INSTANCE_TYPES		16
@@ -1345,15 +1349,15 @@ typedef enum {
 
 
 // these are also in be_aas_def.h - argh (rjr)
-#define	MAX_MODELS				256		// these are sent over the net as 8 bits// boe temp - confirm OK
-#define	MAX_SOUNDS				256		// so they cannot be blindly increased// boe temp - confirm OK
-#define MAX_AMBIENT_SOUNDSETS	64		// boe temp - confirm OK
-#define MAX_FX					64		// max effects strings, I'm hoping that 64 will be plenty// boe temp - confirm OK
-#define MAX_SUB_BSP				32		// boe temp - confirm OK
-#define MAX_ICONS				32		// boe temp - confirm OK
+#define	MAX_MODELS				256		// these are sent over the net as 8 bits
+#define	MAX_SOUNDS				256		// so they cannot be blindly increased
+#define MAX_AMBIENT_SOUNDSETS	64
+#define MAX_FX					64		// max effects strings, I'm hoping that 64 will be plenty
+#define MAX_SUB_BSP				32
+#define MAX_ICONS				32
 #define	MAX_CHARSKINS			64		// character skins
 
-#define	MAX_CONFIGSTRINGS		1400	// boe temp - confirm OK
+#define	MAX_CONFIGSTRINGS		1400
 
 // these are the only configstrings that the system reserves, all the
 // other ones are strictly for servergame to clientgame communication
@@ -1374,13 +1378,13 @@ typedef struct {
 //=========================================================
 
 // bit field limits
-#define	MAX_STATS				16			// boe temp - confirm OK
-#define	MAX_PERSISTANT			16			// boe temp - confirm OK
-#define	MAX_AMMO				16			// boe temp - confirm OK
-#define	MAX_WEAPONS				32			// boe temp - confirm OK
+#define	MAX_STATS				16
+#define	MAX_PERSISTANT			16
+#define	MAX_AMMO				16
+#define	MAX_WEAPONS				32
 #define MAX_GAMETYPE_ITEMS		5
 
-#define	MAX_PS_EVENTS			4			// boe temp - confirm OK
+#define	MAX_PS_EVENTS			4
 
 #define PS_PMOVEFRAMECOUNTBITS	6
 

@@ -33,7 +33,7 @@ typedef struct
 	vec3_t		previous_origin;
 	vec3_t		previous_velocity;
 	int			previous_waterlevel;
-} pml_t;	// boe not confirming ok, but it's the exact same as Q3, so guess OK.
+} pml_t;
 
 extern	pml_t		pml;
 
