@@ -688,9 +688,9 @@ float Q_rsqrt( float f );		// reciprocal square root
 signed char ClampChar( int i );
 signed short ClampShort( int i );
 
-#if 0
+#ifdef Q3_VM
 float powf ( float x, int y );
-#endif
+#endif // Q3_VM
 
 // this isn't a real cheap function to call!
 int DirToByte( vec3_t dir );
@@ -1363,8 +1363,11 @@ typedef enum {
 // other ones are strictly for servergame to clientgame communication
 #define	CS_SERVERINFO		0		// an info string with all the serverinfo cvars
 #define	CS_SYSTEMINFO		1		// an info string for server system to client system configuration (timescale, etc)
+
+#ifndef _DEMO
 #define CS_PLAYERS			2		// info string for player user info
 #define CS_CUSTOM			(CS_PLAYERS + MAX_CLIENTS )
+#endif // not _DEMO
 
 #define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
 

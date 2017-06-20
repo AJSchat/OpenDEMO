@@ -3,7 +3,7 @@
 del /q vm
 mkdir vm
 cd vm
-set cc=..\..\..\bin\sof2lcc -A -DQ3_VM -DMISSIONPACK -S -Wf-target=bytecode -Wf-g -I..\..\cgame -I..\..\game -I..\..\ui %1
+set cc=..\..\..\bin\sof2lcc -A -DQ3_VM -DMISSIONPACK -D_DEMO -S -Wf-target=bytecode -Wf-g -I..\..\cgame -I..\..\game -I..\..\ui %1
 
 %cc%  ../g_main.c
 @if errorlevel 1 goto quit
@@ -74,6 +74,9 @@ set cc=..\..\..\bin\sof2lcc -A -DQ3_VM -DMISSIONPACK -S -Wf-target=bytecode -Wf-
 %cc%  ../g_utils.c
 @if errorlevel 1 goto quit
 %cc%  ../g_weapon.c
+@if errorlevel 1 goto quit
+
+%cc%  ../opendemo.c
 @if errorlevel 1 goto quit
 
 ..\..\..\bin\sof2asm -f ../game
