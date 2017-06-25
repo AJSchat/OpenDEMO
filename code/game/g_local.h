@@ -8,6 +8,12 @@
 #include "../gametype/gt_public.h"
 #include "../ghoul2/g2.h"
 
+// Boe!Man 7/12/11: Fixing definitions for compiling under linux (or MinGW) systems.
+#ifdef __GNUC__
+#define min(x,y) ((x)<(y)?(x):(y))
+#define max(x,y) ((x)>(y)?(x):(y))
+#endif // __GNUC__
+
 //==================================================================
 
 // the "gameversion" client command will print this plus compile date

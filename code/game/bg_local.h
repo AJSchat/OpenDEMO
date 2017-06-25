@@ -2,6 +2,12 @@
 //
 // bg_local.h -- local definitions for the bg (both games) files
 
+// Boe!Man 7/12/11: Fixing definitions for compiling under linux (or MinGW) systems.
+#ifdef __GNUC__
+#define min(x,y) ((x)<(y)?(x):(y))
+#define max(x,y) ((x)>(y)?(x):(y))
+#endif // __GNUC__
+
 #define	MIN_WALK_NORMAL				0.7f		// can't walk on very steep slopes
 #define MIN_WALK_NORMAL_TERRAIN		0.625f		// bit steeper for terrain
 

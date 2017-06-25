@@ -842,6 +842,7 @@ vec_t VectorNormalize2( const vec3_t v, vec3_t out );
 void Vector4Scale( const vec4_t in, vec_t scale, vec4_t out );
 void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out );
 
+#ifndef __GNUC__
 #ifndef __LCC__
 #ifndef	__linux__
 
@@ -889,8 +890,8 @@ static ID_INLINE int qftol( float f )
 }
 
 #endif // __linux__
-#endif
-
+#endif // __LCC__
+#endif // __GNUC__
 
 qboolean Q_TestRaySphere ( vec3_t origin, float radius, const vec3_t start, const vec3_t end );
 
@@ -1747,7 +1748,7 @@ typedef struct {
 
 // For ghoul2 axis use
 
-typedef enum Eorientations
+typedef enum
 {
 	ORIGIN = 0, 
 	POSITIVE_X,
@@ -1756,7 +1757,7 @@ typedef enum Eorientations
 	NEGATIVE_X,
 	NEGATIVE_Z,
 	NEGATIVE_Y
-};
+} Eorientations;
 /*
 Ghoul2 Insert End
 */

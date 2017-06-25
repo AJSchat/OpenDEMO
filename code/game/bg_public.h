@@ -40,7 +40,7 @@
 	#define	GAME_VERSION		"sof2mp-1.00"
 #else
 	#define	GAME_VERSION		"sof2mp-1.02t"
-#endif
+#endif // not _DEMO
 
 #define	DEFAULT_GRAVITY		800
 #define	ARMOR_PROTECTION	0.55
