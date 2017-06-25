@@ -41,7 +41,6 @@ linker=""
 count=0
 verbose=false
 noclear=false
-dev=false
 full=false
 outfile="sof2mp_gamex86.dll"
 
@@ -219,14 +218,9 @@ else
     m32b=""
 fi
 
-if [ $dev == false ]; then
-    $linker $m32b $strip -shared $linkfiles -static -static-libgcc -o $outfile 2>> compile_log
-else
-    $linker $m32b -shared $linkfiles -static -static-libgcc -o $outfile 2>> compile_log
-fi
-printf "done!\n"
+$linker $m32b $strip -shared $linkfiles -static -static-libgcc -o $outfile 2>> compile_log
 
-printf "\n"
+printf "done!\n\n"
 printf "\e[00;36mChecking end-result\e[00m\n"
 printf "=====================================================\n"
 
