@@ -40,7 +40,7 @@
 
 //#define SPECIAL_PRE_CACHE	1
 
-#ifdef _DEBUG
+#if 1
 #define _SOF2_BOTS
 #endif
 
