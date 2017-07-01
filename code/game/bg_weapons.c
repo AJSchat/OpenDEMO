@@ -302,7 +302,11 @@ static qboolean BG_ParseAttackStats ( int weaponNum, attackData_t* attack, void 
 		}
 		trap_GPG_FindPairValue(sub, "mp_speed||speed", "0", tmpStr);
 		attack->rV.velocity = atoi(tmpStr);
+		#ifndef _DEMO
 		trap_GPG_FindPairValue(sub, "mp_timer||timer", "10", tmpStr);
+		#else
+		trap_GPG_FindPairValue(sub, "timer", "10", tmpStr);
+		#endif // not _DEMO
 		attack->projectileLifetime = (int)(atof(tmpStr) * 1000);
 
 		// 'trail' effect
