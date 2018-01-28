@@ -1,7 +1,4 @@
 # OpenDEMO
-## A SoF2MPSDK made compatible with MP TEST
----
-
 OpenDEMO is a SoF2MPSDK created to be compatible with SoF2 MP TEST, commonly
 referred to as *demo* (hence the name). Next to modifying the code in such a way
 that the netcode is fully compatible with MP TEST, it also tries to replicate
